@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { MdHome, MdOndemandVideo, MdTune, MdLink, MdCheckCircle } from "react-icons/md";
+import { MdHome, MdOndemandVideo, MdTune, MdLink } from "react-icons/md";
 
+import HandyConnection from "../HandyConnection";
 import style from "./Sidebar.module.scss";
 import Footer from "./Footer";
 
@@ -54,15 +55,7 @@ const Sidebar = () => {
                 </ul>
                 <ul className={style.sidebarNav}>
                     <li>
-                        <p>
-                            <span
-                                className={style.navIcon}
-                                style={{ color: "var(--color-green-600)" }}
-                            >
-                                <MdCheckCircle />
-                            </span>
-                            <span className={style.navText}>Handy Connected</span>
-                        </p>
+                        <HandyConnection />
                     </li>
                 </ul>
             </div>

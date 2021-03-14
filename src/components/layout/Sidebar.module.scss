@@ -13,14 +13,13 @@
     border-bottom: 1px solid var(--color-neutral-500);
 
     > li {
-        height: 3rem;
+        min-height: 3rem;
 
         display: flex;
         justify-content: space-between;
     }
 
-    a,
-    p {
+    a {
         width: 100%;
         display: flex;
         align-items: center;
