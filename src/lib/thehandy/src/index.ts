@@ -5,6 +5,9 @@ import {
     SetStrokeResponse,
     SettingsResponse,
     StatusResponse,
+    SyncOffsetResponse,
+    SyncPlayResponse,
+    SyncPrepareResponse,
     VersionResponse,
 } from "./types";
 
@@ -117,6 +120,88 @@ class Handy {
         return json;
     }
 
+    //---------------------------------------------
+    //             SERVER TIME SYNC
+    //---------------------------------------------
+    async getServerTimeOffset(trips = 30): Promise<number> {
+        this.enforceConnectionKey();
+        const url = this.getUrl("getServerTime");
+
+        //don't count the first one
+        await (await fetch(url)).json();
+
+        let offsets = [];
+        for (let i = 0; i < trips; i++) {
+            const startTime = new Date().valueOf();
+
+            const response = await fetch(url);
+            const json = await response.json();
+            const endTime = new Date().valueOf();
+            const rtd = endTime - startTime;
+            const estimatedServerTime = Number(json.serverTime) + rtd / 2;
+            const offset = estimatedServerTime - endTime;
+            offsets.push(offset);
+        }
+
+        //discard all readings more than one standard deviation from the mean, to reduce error
+        const mean = offsets.reduce((acc, offset) => acc + offset, 0) / offsets.length;
+        const errors = offsets.map(offset => Math.pow(offset - mean, 2));
+        const sd = Math.sqrt(errors.reduce((acc, offset) => acc + offset, 0) / errors.length);
+        offsets = offsets.filter(offset => Math.abs(offset - mean) < sd);
+
+        //get average offset
+        const offsetAggregate = offsets.reduce((acc, offset) => acc + offset) / offsets.length;
+        this.serverTimeOffset = offsetAggregate;
+        return this.serverTimeOffset;
+    }
+
+    //---------------------------------------------
+    //                 VIDEO SYNC
+    //---------------------------------------------
+    async syncPrepare(
+        scriptUrl: string,
+        name?: string,
+        size?: number
+    ): Promise<SyncPrepareResponse> {
+        this.enforceConnectionKey();
+        let url = this.getUrl("syncPrepare") + "?url=" + scriptUrl + "&timeout=30000";
+        if (name) url += "&name=" + name;
+        if (size) url += "&size=" + size;
+        const response = await fetch(url);
+        const json = await response.json();
+        if (json.error) throw json;
+        return json;
+    }
+
+    async syncPlay(play = true, time = 0): Promise<SyncPlayResponse> {
+        this.enforceConnectionKey();
+        const serverTime = new Date().valueOf() + this.serverTimeOffset;
+        const url =
+            this.getUrl("syncPlay") +
+            "?play=" +
+            play +
+            "&serverTime=" +
+            serverTime +
+            "&time=" +
+            time;
+        const response = await fetch(url);
+        const json = await response.json();
+        if (json.error) throw json;
+        return json;
+    }
+
+    async syncOffset(offset: number): Promise<SyncOffsetResponse> {
+        this.enforceConnectionKey();
+        const url = this.getUrl("syncOffset") + "?offset=" + offset;
+        const response = await fetch(url);
+        const json = await response.json();
+        if (json.error) throw json;
+        return json;
+    }
+
+    //---------------------------------------------
+    //                  UTILS
+    //---------------------------------------------
     enforceConnectionKey() {
         if (!this.connectionKey) throw new Error("connection key not set");
     }

@@ -10,6 +10,7 @@ const Play = () => {
         speedAbsolute: false,
         stroke: 50,
         strokeAbsolute: false,
+        offset: 0,
     });
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === "on") {
@@ -129,6 +130,54 @@ const Play = () => {
         setWaiting(false);
     };
 
+    const getServerTimeOffset = async () => {
+        setWaiting(true);
+        console.log("get server time offset");
+        try {
+            const result = await handy.getServerTimeOffset();
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+        setWaiting(false);
+    };
+
+    const syncPrepare = async (url: string, name?: string, size?: number) => {
+        setWaiting(true);
+        console.log("sync prepare to " + url);
+        try {
+            const result = await handy.syncPrepare(url, name, size);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+        setWaiting(false);
+    };
+
+    const syncPlay = async (play: boolean) => {
+        setWaiting(true);
+        console.log("sync play");
+        try {
+            const result = await handy.syncPlay(play);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+        setWaiting(false);
+    };
+
+    const syncOffset = async (offset: number) => {
+        setWaiting(true);
+        console.log("sync offset to " + offset);
+        try {
+            const result = await handy.syncOffset(offset);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+        setWaiting(false);
+    };
+
     return (
         <Layout>
             <div>
@@ -142,6 +191,9 @@ const Play = () => {
                     </button>
                     <button disabled={waiting} onClick={() => getStatus()}>
                         Get Status
+                    </button>
+                    <button disabled={waiting} onClick={() => getServerTimeOffset()}>
+                        Get Server Time Offset
                     </button>
                 </div>
                 <div>
@@ -209,6 +261,35 @@ const Play = () => {
                     </button>
                     <button disabled={waiting} onClick={() => stepStroke(true)}>
                         Step Stroke Up
+                    </button>
+                </div>
+                <div>
+                    <button
+                        disabled={waiting}
+                        onClick={() =>
+                            syncPrepare(
+                                "https://sweettecheu.s3.eu-central-1.amazonaws.com/scripts/admin/dataset.csv"
+                            )
+                        }
+                    >
+                        Sync Prepare
+                    </button>
+                    <button disabled={waiting} onClick={() => syncPlay(true)}>
+                        Sync Play
+                    </button>
+                    <button disabled={waiting} onClick={() => syncPlay(false)}>
+                        Sync Pause
+                    </button>
+                    <input
+                        type="range"
+                        id="offset"
+                        min="-500"
+                        max="500"
+                        value={data.offset}
+                        onChange={handleChange}
+                    />
+                    <button disabled={waiting} onClick={() => syncOffset(data.offset)}>
+                        Set Offset
                     </button>
                 </div>
             </div>

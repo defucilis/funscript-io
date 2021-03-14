@@ -47,3 +47,16 @@ export interface SetStrokeResponse extends SetResponse {
     stroke: number;
     strokePercent: number;
 }
+
+export interface SyncPrepareResponse extends CommandResponse {
+    downloaded: boolean;
+}
+
+export interface SyncPlayResponse extends CommandResponse {
+    setOffset: number;
+    serverTimeDelta?: number;
+}
+
+export interface SyncOffsetResponse extends CommandResponse {
+    offset: number;
+}
