@@ -1,0 +1,94 @@
+@import "./vars.scss";
+
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-width: 991px;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+a,
+span,
+label,
+pre {
+    color: var(--color-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+h1 {
+    margin-bottom: 0.5em;
+    font-size: 1.5em;
+}
+
+*:focus {
+    outline: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+html {
+    background-color: var(--color-bg);
+}
+
+/* I have no idea why my body is getting an explicit 8px bottom margin applied... */
+body {
+    position: relative;
+    top: 8px;
+    margin-top: -8px;
+}
+
+::-webkit-input-placeholder {
+    /* Edge */
+    font-style: italic;
+}
+
+:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-style: italic;
+}
+
+::placeholder {
+    font-style: italic;
+}
+
+input,
+textarea {
+    background-color: var(--color-neutral-600);
+    color: var(--color-text);
+    border: 1px solid var(--color-neutral-800);
+    border-radius: 5px;
+}
+
+.grey {
+    color: var(--color-neutral-500);
+}

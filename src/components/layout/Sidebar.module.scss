@@ -1,0 +1,48 @@
+.sidebar {
+    width: 220px;
+    height: calc(100vh - 40px);
+    background-color: var(--color-neutral-300);
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sidebarNav {
+    width: 100%;
+
+    > li {
+        height: 3rem;
+        margin-left: -1rem;
+
+        display: flex;
+        justify-content: space-between;
+    }
+
+    a {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+
+        background-color: var(--color-neutral-300);
+
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: var(--color-neutral-400);
+        }
+    }
+}
+
+.navIcon {
+    color: var(--color-text);
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    position: relative;
+    top: 1px;
+}
+
+.navText {
+    font-size: 1rem;
+}
