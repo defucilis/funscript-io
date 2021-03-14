@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import Layout from "../components/layout/Layout";
 import useHandy from "../lib/thehandy/src/TheHandy";
+import style from "./Manual.module.scss";
 
 const Play = () => {
     const { handy } = useHandy();
@@ -180,8 +181,9 @@ const Play = () => {
 
     return (
         <Layout>
-            <div>
-                <h1>Manual Mode</h1>
+            <div className={style.manual}>
+                <h1>Debug Controls</h1>
+                <h3>Get Data</h3>
                 <div>
                     <button disabled={waiting} onClick={() => getVersion()}>
                         Get Version
@@ -196,6 +198,7 @@ const Play = () => {
                         Get Server Time Offset
                     </button>
                 </div>
+                <h3>Change Mode</h3>
                 <div>
                     <button disabled={waiting} onClick={() => setMode(0)}>
                         Set Mode Off
@@ -207,6 +210,7 @@ const Play = () => {
                         Toggle Mode Auto
                     </button>
                 </div>
+                <h3>Manual Mode Commands</h3>
                 <div>
                     <button disabled={waiting} onClick={() => stepSpeed(false)}>
                         Step Speed Down
@@ -263,6 +267,7 @@ const Play = () => {
                         Step Stroke Up
                     </button>
                 </div>
+                <h3>Sync Commands</h3>
                 <div>
                     <button
                         disabled={waiting}

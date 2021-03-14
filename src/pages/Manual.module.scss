@@ -1,0 +1,29 @@
+.manual {
+    margin: 1rem 0 0 1rem;
+
+    > div {
+        width: 100%;
+        display: flex;
+        margin-bottom: 1rem;
+        align-items: center;
+    }
+
+    button {
+        border: 0;
+        border-radius: 2px;
+        background-color: var(--color-theme-500);
+        font-size: 1.2rem;
+        padding: 0.25rem 0.5rem;
+        color: var(--color-neutral-100);
+        margin-right: 1rem;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.5);
+        margin-right: 1rem;
+    }
+
+    input[type="range"] {
+        margin-right: 1rem;
+    }
+}
