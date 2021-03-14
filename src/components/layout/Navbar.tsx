@@ -9,7 +9,7 @@ const Navbar = () => {
             <div className={style.logo}>
                 <div>
                     <Link to={`/`}>
-                        APP TITLE<span className={style.versionNumber}>v0.0.1</span>
+                        funscript.io<span className={style.versionNumber}>v0.0.1</span>
                     </Link>
                 </div>
             </div>
