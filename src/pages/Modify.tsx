@@ -1,12 +1,7 @@
 import React from "react";
 import Layout from "../components/layout/Layout";
-import useHandy from "../lib/thehandy/src/TheHandy";
 
 const Play = () => {
-    const { handy } = useHandy();
-
-    console.log(handy.connectionKey);
-
     return (
         <Layout>
             <div>
