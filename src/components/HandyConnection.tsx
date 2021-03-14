@@ -60,6 +60,12 @@ const HandyConnection = () => {
         }
     }, [handyConnected, loading]);
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (handyConnected) disconnect();
+        else connect();
+    };
+
     const disconnect = () => {
         handy.connectionKey = "";
         setHandyConnected(false);
@@ -80,16 +86,20 @@ const HandyConnection = () => {
                 {icon}
                 <span className={style.navText}>{label}</span>
             </p>
-            <input
-                type="text"
-                disabled={handyConnected || loading}
-                value={connectionKey}
-                onChange={handleConnectionKeyChanged}
-                placeholder={"Connection Key"}
-            />
-            <button onClick={() => (handyConnected ? disconnect() : connect())} disabled={loading}>
-                {handyConnected ? "Disconnect" : "Connect"}
-            </button>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    disabled={handyConnected || loading}
+                    value={connectionKey}
+                    onChange={handleConnectionKeyChanged}
+                    placeholder={"Connection Key"}
+                />
+                <input
+                    type="submit"
+                    disabled={loading}
+                    value={handyConnected ? "Disconnect" : "Connect"}
+                />
+            </form>
         </div>
     );
 };
