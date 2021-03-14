@@ -2,7 +2,6 @@
     width: 220px;
     height: calc(100vh - 40px);
     background-color: var(--color-neutral-300);
-    padding-left: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -11,20 +10,25 @@
 .sidebarNav {
     width: 100%;
 
+    border-bottom: 1px solid var(--color-neutral-500);
+
     > li {
         height: 3rem;
-        margin-left: -1rem;
 
         display: flex;
         justify-content: space-between;
     }
 
-    a {
+    a,
+    p {
         width: 100%;
         display: flex;
         align-items: center;
         padding-left: 1rem;
+        margin: 0;
+    }
 
+    a {
         background-color: var(--color-neutral-300);
 
         transition: all 0.3s;

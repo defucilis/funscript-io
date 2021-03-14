@@ -5,11 +5,14 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import "./index.scss";
+import { HandyProvider } from "./lib/thehandy/src/TheHandy";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <App />
+            <HandyProvider>
+                <App />
+            </HandyProvider>
         </BrowserRouter>
     </React.StrictMode>,
     document.getElementById("root")

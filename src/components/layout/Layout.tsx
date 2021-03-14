@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
-import style from './Layout.module.scss'
+import style from "./Layout.module.scss";
 
 const Layout = ({ children }: { children: ReactNode }) => {
     return (
