@@ -14,7 +14,9 @@ const Navbar = () => {
                 </div>
             </div>
             <ul>
-                <p>Things can go here</p>
+                <li>
+                    <p>Things can go here</p>
+                </li>
             </ul>
         </nav>
     );

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import Layout from "../components/layout/Layout";
-import { useHandy } from "thehandy";
+import useHandy from "../lib/HandyReact";
 import style from "./Manual.module.scss";
 
 const Play = () => {
@@ -135,7 +135,7 @@ const Play = () => {
         setWaiting(true);
         console.log("get server time offset");
         try {
-            const result = await handy.getServerTimeOffset();
+            const result = await handy.getServerTimeOffset(10);
             console.log(result);
         } catch (error) {
             console.error(error);
@@ -158,6 +158,7 @@ const Play = () => {
     const syncPlay = async (play: boolean) => {
         setWaiting(true);
         console.log("sync play");
+        console.log("time is ", new Date().valueOf());
         try {
             const result = await handy.syncPlay(play);
             console.log(result);

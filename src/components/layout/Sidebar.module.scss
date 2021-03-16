@@ -38,6 +38,23 @@
     }
 }
 
+.selected a {
+    background-color: var(--color-neutral-200);
+    overflow: hidden;
+    position: relative;
+
+    &:before {
+        content: "\0020";
+        display: block;
+        position: absolute;
+        width: calc(100% + 40px);
+        height: 20px;
+        top: -20px;
+        left: -20px;
+        box-shadow: 0px 0px 10px 0px black;
+    }
+}
+
 .navIcon {
     color: var(--color-text);
     font-size: 1.5rem;

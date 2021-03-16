@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode, useCallback } from "react";
-import { useHandy } from "thehandy";
+import useHandy from "../lib/HandyReact";
 
 import { MdCheckCircle, MdCached, MdError } from "react-icons/md";
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { MdHome, MdOndemandVideo, MdTune, MdLink } from "react-icons/md";
 
@@ -8,11 +9,13 @@ import style from "./Sidebar.module.scss";
 import Footer from "./Footer";
 
 const Sidebar = () => {
+    const location = useLocation();
+
     return (
         <div className={style.sidebar}>
             <div>
                 <ul className={style.sidebarNav}>
-                    <li>
+                    <li className={location.pathname === "/" ? style.selected : null}>
                         <Link to={`/`}>
                             <span className={style.navIcon}>
                                 <MdHome />
@@ -20,7 +23,7 @@ const Sidebar = () => {
                             <span className={style.navText}>Home</span>
                         </Link>
                     </li>
-                    <li>
+                    <li className={location.pathname === "/play" ? style.selected : null}>
                         <Link to={`/play`}>
                             <span className={style.navIcon}>
                                 <MdOndemandVideo />
@@ -28,7 +31,7 @@ const Sidebar = () => {
                             <span className={style.navText}>Play local script</span>
                         </Link>
                     </li>
-                    <li>
+                    <li className={location.pathname === "/manual" ? style.selected : null}>
                         <Link to={`/manual`}>
                             <span className={style.navIcon} style={{ top: 0 }}>
                                 M
@@ -36,7 +39,7 @@ const Sidebar = () => {
                             <span className={style.navText}>Manual mode</span>
                         </Link>
                     </li>
-                    <li>
+                    <li className={location.pathname === "/browse" ? style.selected : null}>
                         <a href="https://scriptaxis.com" target="_blank" rel="noopener noreferrer">
                             <span className={style.navIcon}>
                                 <MdLink />
@@ -44,7 +47,7 @@ const Sidebar = () => {
                             <span className={style.navText}>Find more scripts</span>
                         </a>
                     </li>
-                    <li>
+                    <li className={location.pathname === "/modify" ? style.selected : null}>
                         <Link to={`/modify`}>
                             <span className={style.navIcon}>
                                 <MdTune />
