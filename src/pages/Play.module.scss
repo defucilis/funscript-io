@@ -1,3 +1,5 @@
+//--------------------------------GLOBAL
+
 .play {
     display: grid;
     grid-template-rows: 3fr 5fr 2fr;
@@ -5,6 +7,8 @@
     gap: 2rem;
     height: 100%;
 }
+
+//--------------------------------DROPZONES
 
 .dropzones {
     display: grid;
@@ -17,8 +21,8 @@
 
 .dropzone {
     border: 1px dashed var(--color-neutral-700);
-    display: grid;
-    place-items: center;
+    // display: grid;
+    // place-items: center;
     background-color: rgba(255, 255, 255, 0);
     transition: all 0.3s;
     position: relative;
@@ -62,6 +66,17 @@
     }
 }
 
+.error {
+    color: var(--color-red-700);
+    font-size: 1.2rem;
+
+    button {
+        background-color: var(--color-red-700);
+    }
+}
+
+//-----------------------------------PLAYER
+
 .player {
     background-color: black;
     position: relative;
@@ -80,18 +95,7 @@
     }
 }
 
-canvas {
-    width: 100%;
-}
-
-.error {
-    color: var(--color-red-700);
-    font-size: 1.2rem;
-
-    button {
-        background-color: var(--color-red-700);
-    }
-}
+//-----------------------------------PREPARING
 
 .preparing {
     width: 100%;
@@ -128,6 +132,8 @@ canvas {
     }
 }
 
+//-----------------------------------CONTROLS
+
 .controls {
     display: flex;
     flex-direction: column;
@@ -141,8 +147,16 @@ canvas {
     }
 
     .scriptInfo {
+        margin-right: 1rem;
+        min-width: 200px;
+
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+
         p {
             font-size: 1.2rem;
+            margin: 0;
 
             span {
                 font-weight: bold;
@@ -151,18 +165,36 @@ canvas {
     }
 
     .syncOffset {
-        display: flex;
-        align-items: center;
+        display: grid;
+        place-items: center;
+        grid-template-columns: 1fr 2fr 1fr;
 
-        button {
-            height: 4rem;
-            width: 12rem;
+        .syncButton {
+            position: relative;
+
+            button {
+                height: 4rem;
+            }
+
+            p {
+                position: absolute;
+                height: 2rem;
+                bottom: -2rem;
+                width: 100%;
+                font-size: 1rem;
+                text-align: center;
+                left: 0;
+                margin: 0;
+                padding: 0;
+            }
         }
 
         p {
-            margin: 0 2rem;
-            font-size: 2rem;
-            width: 24rem;
+            // margin: 0 2rem;
+            padding: 0 1rem;
+            margin: 0;
+            font-size: 1.5rem;
+            // width: 24rem;
 
             span {
                 display: block;
@@ -170,6 +202,10 @@ canvas {
             }
         }
     }
+}
+
+canvas {
+    width: 100%;
 }
 
 .heatmap {

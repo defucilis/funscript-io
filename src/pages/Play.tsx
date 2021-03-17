@@ -29,7 +29,7 @@ const formatDuration = (seconds: number) => {
     if (minutes >= 10) output += minutes + ":";
     else if (minutes > 0 && hours > 0) output += "0" + minutes + ":";
     else if (minutes > 0 && hours === 0) output += minutes + ":";
-    else if (minutes === 0 && hours > 0) output += "00:";
+    else if (minutes === 0) output += "00:";
     if (seconds > 10) output += seconds;
     else if (seconds > 0) output += "0" + seconds;
     else output += "00";
@@ -447,14 +447,15 @@ const Play = () => {
                                     )}
                                 </div>
                                 <div className={style.syncOffset}>
-                                    <button
-                                        disabled={waiting}
-                                        onClick={() => incrementSyncOffset(-50)}
-                                    >
-                                        Delay Handy
-                                        <br />
-                                        (Left Arrow)
-                                    </button>
+                                    <div className={style.syncButton}>
+                                        <button
+                                            disabled={waiting}
+                                            onClick={() => incrementSyncOffset(-50)}
+                                        >
+                                            Delay Handy
+                                        </button>
+                                        <p>(Left Arrow)</p>
+                                    </div>
                                     <div>
                                         <p>
                                             <span>Handy is </span>
@@ -467,14 +468,15 @@ const Play = () => {
                                             </span>
                                         </p>
                                     </div>
-                                    <button
-                                        disabled={waiting}
-                                        onClick={() => incrementSyncOffset(50)}
-                                    >
-                                        Advance Handy
-                                        <br />
-                                        (Right Arrow)
-                                    </button>
+                                    <div className={style.syncButton}>
+                                        <button
+                                            disabled={waiting}
+                                            onClick={() => incrementSyncOffset(50)}
+                                        >
+                                            Advance Handy
+                                        </button>
+                                        <p>(Right Arrow)</p>
+                                    </div>
                                 </div>
                             </div>
                             <div className={style.heatmap}>
