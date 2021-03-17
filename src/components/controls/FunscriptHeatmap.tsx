@@ -1,7 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { Funscript } from "funscript-utils/lib/types";
-import renderHeatmap, { HeatmapOptions } from "funscript-utils/lib/funMapper";
+import { renderHeatmap, HeatmapOptions } from "funscript-utils/lib/funMapper";
+
+const getOffset = (el: any) => {
+    let _x = 0;
+    let _y = 0;
+    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+        _x += el.offsetLeft - el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+};
 
 const FunscriptHeatmap = ({
     funscript,
@@ -9,6 +20,7 @@ const FunscriptHeatmap = ({
     height,
     options,
     hoverDisplayDuration,
+    playbackTime,
     onMouseEnter,
     onMouseLeave,
     onMouseMove,
@@ -19,6 +31,7 @@ const FunscriptHeatmap = ({
     height: number;
     options?: HeatmapOptions;
     hoverDisplayDuration?: number;
+    playbackTime?: number;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
     onMouseMove?: (pos: { x?: number; y?: number; localX?: number; localY?: number }) => void;
@@ -27,6 +40,7 @@ const FunscriptHeatmap = ({
     const parentRef = useRef<HTMLDivElement>();
     const canvasRef = useRef<HTMLCanvasElement>();
     const overlayRef = useRef<HTMLDivElement>();
+    const playbackRef = useRef<HTMLDivElement>();
     const [localMousePos, setLocalMousePos] = useState<{ x: number; y: number }>(null);
     const [funscriptDuration, setFunscriptDuration] = useState(1);
 
@@ -89,15 +103,9 @@ const FunscriptHeatmap = ({
                     setLocalMousePos(null);
                 }}
                 onMouseMove={e => {
-                    const localX =
-                        (e.pageX -
-                            parentRef.current.offsetLeft -
-                            parentRef.current.scrollLeft +
-                            1) /
-                        canvasRef.current.width;
-                    const localY =
-                        (e.pageY - parentRef.current.offsetTop - parentRef.current.scrollTop + 1) /
-                        canvasRef.current.height;
+                    const parentOffset = getOffset(parentRef.current);
+                    const localX = (e.pageX - parentOffset.left + 1) / canvasRef.current.width;
+                    const localY = (e.pageY - parentOffset.top + 1) / canvasRef.current.height;
                     if (onMouseMove) onMouseMove({ localX, localY });
                     setLocalMousePos({ x: localX, y: localY });
                 }}
@@ -115,6 +123,19 @@ const FunscriptHeatmap = ({
                     pointerEvents: "none",
                 }}
             ></div>
+            {playbackTime === undefined ? null : (
+                <div
+                    ref={playbackRef}
+                    style={{
+                        position: "absolute",
+                        height: "100%",
+                        backgroundColor: "#FFF",
+                        width: "2px",
+                        left: `calc(${(100 * playbackTime * 1000) / funscriptDuration}% - 1px)`,
+                        top: "0px",
+                    }}
+                ></div>
+            )}
         </div>
     );
 };

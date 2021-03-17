@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback, ReactNode } from "react";
-import ReactPlayer from "react-player";
 import Layout from "../components/layout/Layout";
 
 import useHandy from "../lib/HandyReact";
@@ -9,9 +8,11 @@ import Dropzone, { FileRejection } from "react-dropzone";
 import style from "./Play.module.scss";
 import { convertFunscriptToCsv, getFunscriptFromString } from "funscript-utils/lib/funConverter";
 import { Funscript } from "funscript-utils/lib/types";
-import FunscriptHeatmap from "../components/controls/Heatmap";
+import FunscriptHeatmap from "../components/controls/FunscriptHeatmap";
 import SingleScreenPage from "../components/layout/SingleScreenPage";
 import { formatColor, getColor } from "funscript-utils/lib/funMapper";
+import FunscriptPreview from "../components/controls/FunscriptPreview";
+import VideoPlayer from "../components/controls/VideoPlayer";
 
 interface PrepareStatus {
     status: "inactive" | "sync" | "prepare" | "ready";
@@ -43,8 +44,9 @@ const Play = () => {
     const [csvUrl, setCsvUrl] = useState("");
     const [funscriptName, setFunscriptName] = useState("");
     const [videoName, setVideoName] = useState("");
-    const videoRef = useRef<ReactPlayer>();
     const controlsRef = useRef<HTMLDivElement>();
+    const previewRef = useRef<HTMLDivElement>();
+    const playerParentRef = useRef<HTMLDivElement>();
 
     const [waiting, setWaiting] = useState(false);
     const [syncOffset, setSyncOffset] = useState(0);
@@ -53,6 +55,19 @@ const Play = () => {
 
     const [videoError, setVideoError] = useState("");
     const [funscriptError, setFunscriptError] = useState("");
+
+    const [showingPreview, setShowingPreview] = useState(false);
+    const [previewDuration, setPreviewDuration] = useState(1);
+    const [previewPosition, setPreviewPosition] = useState(0);
+
+    const [lastSyncTime, setLastSyncTime] = useState(-1);
+
+    useEffect(() => {
+        if (!funscript || !funscript.metadata) return;
+        setPreviewDuration(funscript.metadata.duration / 5);
+        setPreviewPosition(0);
+        setLastSyncTime(-1);
+    }, [funscript]);
 
     const [prepareStatus, setPrepareStatus] = useState<PrepareStatus>({
         status: "ready",
@@ -110,6 +125,12 @@ const Play = () => {
         }
     };
 
+    useEffect(() => {
+        setLastSyncTime(-1);
+        setPlaying(false);
+        setPlaybackTime(0);
+    }, [videoUrl]);
+
     const handleVideoRejected = (rejections: FileRejection[]) => {
         setVideoError(
             rejections[0].errors.find(error => error.code === "wrong-file-extension").message
@@ -158,12 +179,13 @@ const Play = () => {
         if (playing) return;
         setPlaying(true);
         syncPlay(true, playbackTime * 1000);
+        setLastSyncTime(-1);
     };
     const handlePause = () => {
         if (!playing) return;
         setPlaying(false);
         syncPlay(false);
-        setPlaybackTime(videoRef.current.getCurrentTime());
+        setLastSyncTime(-1);
     };
     const handleSeek = (seconds: number) => {
         console.log("Seek from", { playing, seconds });
@@ -171,6 +193,7 @@ const Play = () => {
         if (playing) {
             syncPlay(true, seconds * 1000);
         }
+        setLastSyncTime(-1);
     };
 
     const fullPrepare = useCallback(
@@ -309,6 +332,18 @@ const Play = () => {
         };
     }, [waiting, incrementSyncOffset]);
 
+    const handleVideoProgress = async (seconds: number) => {
+        setPlaybackTime(seconds);
+        if (!playing || (lastSyncTime >= 0 && Math.abs(seconds - lastSyncTime) < 10)) return;
+        const first = lastSyncTime < 0;
+        setLastSyncTime(seconds);
+        try {
+            await handy.syncAdjustTimestamp(seconds, first ? 1 : 0.5);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <Layout>
             <SingleScreenPage>
@@ -372,48 +407,68 @@ const Play = () => {
                             )}
                         </Dropzone>
                     </div>
-                    {prepareStatus.status !== "ready" ? (
-                        <div className={style.preparing}>
-                            {prepareStatus.status === "inactive" ? (
-                                prepareStatus.error ? (
-                                    <div className={style.error}>
-                                        <p className={style.error}>{prepareStatus.error}</p>
-                                        <button onClick={() => fullPrepare(csvUrl)}>
-                                            Try Again
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <p></p>
-                                )
-                            ) : (
-                                <div>
-                                    <MdCached className="spin" />
-                                    <div className={style.progress}>
-                                        <div style={{ width: `${prepareStatus.syncProgress}%` }}>
-                                            {prepareStatus.status === "prepare" ? (
-                                                <div className="scrollingBars"></div>
-                                            ) : null}
+                    <div className={style.preparingPlayer}>
+                        {prepareStatus.status !== "ready" ? (
+                            <div className={style.preparing}>
+                                {prepareStatus.status === "inactive" ? (
+                                    prepareStatus.error ? (
+                                        <div className={style.error}>
+                                            <p className={style.error}>{prepareStatus.error}</p>
+                                            <button onClick={() => fullPrepare(csvUrl)}>
+                                                Try Again
+                                            </button>
                                         </div>
+                                    ) : (
+                                        <p></p>
+                                    )
+                                ) : (
+                                    <div>
+                                        <MdCached className="spin" />
+                                        <div className={style.progress}>
+                                            <div
+                                                style={{ width: `${prepareStatus.syncProgress}%` }}
+                                            >
+                                                {prepareStatus.status === "prepare" ? (
+                                                    <div className="scrollingBars"></div>
+                                                ) : null}
+                                            </div>
+                                        </div>
+                                        {syncElement}
                                     </div>
-                                    {syncElement}
-                                </div>
+                                )}
+                            </div>
+                        ) : !videoUrl ? (
+                            <div className={style.preparing}></div>
+                        ) : (
+                            <div style={{ height: "100%" }} ref={playerParentRef}>
+                                <VideoPlayer
+                                    videoClassName={style.player}
+                                    videoUrl={videoUrl}
+                                    onPlay={handlePlay}
+                                    onPause={handlePause}
+                                    onSeek={handleSeek}
+                                    onProgress={handleVideoProgress}
+                                />
+                            </div>
+                        )}
+                        <div className={style.preview} ref={previewRef}>
+                            {!funscript || !showingPreview ? null : (
+                                <FunscriptPreview
+                                    funscript={funscript}
+                                    width={!previewRef.current ? 1 : previewRef.current.offsetWidth}
+                                    height={
+                                        !previewRef.current ? 1 : previewRef.current.offsetHeight
+                                    }
+                                    options={{
+                                        clear: true,
+                                        background: "rgba(0,0,0,0.5)",
+                                        startTime: previewPosition,
+                                        duration: previewDuration,
+                                    }}
+                                />
                             )}
                         </div>
-                    ) : !videoUrl ? (
-                        <div className={style.preparing}></div>
-                    ) : (
-                        <ReactPlayer
-                            className={style.player}
-                            width={"100%"}
-                            height={"100%"}
-                            url={videoUrl}
-                            controls={prepareStatus.status === "ready"}
-                            onPlay={handlePlay}
-                            onPause={handlePause}
-                            onSeek={handleSeek}
-                            ref={videoRef}
-                        />
-                    )}
+                    </div>
                     {csvUrl ? (
                         <div className={style.controls} ref={controlsRef}>
                             <div className={style.infoControls}>
@@ -486,6 +541,23 @@ const Play = () => {
                                         !controlsRef.current ? 1 : controlsRef.current.offsetWidth
                                     }
                                     height={30}
+                                    onMouseEnter={() => setShowingPreview(true)}
+                                    onMouseLeave={() => setShowingPreview(false)}
+                                    onWheel={(e: React.WheelEvent<HTMLCanvasElement>) => {
+                                        const dir = e.deltaY;
+                                        setPreviewDuration(cur => {
+                                            console.log(e);
+                                            return Math.min(
+                                                funscript.metadata.duration,
+                                                dir < 0 ? cur / 1.5 : cur * 1.5
+                                            );
+                                        });
+                                    }}
+                                    onMouseMove={(e: any) => setPreviewPosition(e.localX)}
+                                    hoverDisplayDuration={previewDuration}
+                                    playbackTime={
+                                        !playing && !playbackTime ? undefined : playbackTime
+                                    }
                                 />
                             </div>
                         </div>

@@ -12,6 +12,8 @@ const Play = () => {
         stroke: 50,
         strokeAbsolute: false,
         offset: 0,
+        zoneMin: 0,
+        zoneMax: 100,
     });
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === "on") {
@@ -100,6 +102,18 @@ const Play = () => {
         if (absolute) stroke *= 1.1433;
         try {
             const result = await handy.setStroke(stroke, absolute);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+        setWaiting(false);
+    };
+
+    const setStrokeZone = async (min: number, max: number) => {
+        setWaiting(true);
+        console.log("set stroke zone " + min + " to " + max);
+        try {
+            const result = await handy.setStrokeZone(min, max);
             console.log(result);
         } catch (error) {
             console.error(error);
@@ -267,6 +281,30 @@ const Play = () => {
                     <button disabled={waiting} onClick={() => stepStroke(true)}>
                         Step Stroke Up
                     </button>
+                </div>
+                <div>
+                    <input
+                        type="range"
+                        id="zoneMin"
+                        min="0"
+                        max="100"
+                        value={data.zoneMin}
+                        onChange={handleChange}
+                    />
+                    <button
+                        disabled={waiting}
+                        onClick={() => setStrokeZone(data.zoneMin, data.zoneMax)}
+                    >
+                        Set Stroke Zone
+                    </button>
+                    <input
+                        type="range"
+                        id="zoneMax"
+                        min="0"
+                        max="100"
+                        value={data.zoneMax}
+                        onChange={handleChange}
+                    />
                 </div>
                 <h3>Sync Commands</h3>
                 <div>

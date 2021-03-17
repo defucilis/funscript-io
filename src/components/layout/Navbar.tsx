@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { version } from "../../../package.json";
 import style from "./Navbar.module.scss";
 
 const Navbar = () => {
@@ -9,7 +10,7 @@ const Navbar = () => {
             <div className={style.logo}>
                 <div>
                     <Link to={`/`}>
-                        funscript.io<span className={style.versionNumber}>v0.1.0</span>
+                        funscript.io<span className={style.versionNumber}>v{version}</span>
                     </Link>
                 </div>
             </div>
