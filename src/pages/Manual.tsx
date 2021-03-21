@@ -1,20 +1,51 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import Layout from "../components/layout/Layout";
 import useHandy from "../lib/HandyReact";
+
+import {MdKeyboardArrowUp, MdKeyboardArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowDown, MdStop, MdPlayArrow} from 'react-icons/md'
+
 import style from "./Manual.module.scss";
 
-const Play = () => {
+const Debug = () => {
     const { handy } = useHandy();
     const [waiting, setWaiting] = useState(false);
     const [data, setData] = useState({
-        speed: 50,
-        speedAbsolute: false,
-        stroke: 50,
-        strokeAbsolute: false,
-        offset: 0,
-        zoneMin: 0,
-        zoneMax: 100,
+        doRandom: false,
+        randomizeFrequency: 10,
+        frequencyVariability: 5,
+        randomizeSpeedAmount: 30,
+        randomizeStrokeAmount: 20,
     });
+    const [currentStrokeLength, setCurrentStrokeLength] = useState(50);
+    const [currentStrokeSpeed, setCurrentStrokeSpeed] = useState(50);
+    const [currentMode, setCurrentMode] = useState(0);
+
+    useEffect(() => {
+        const getStatus = async () => {
+            setWaiting(true);
+            console.log("get status");
+            try {
+                const result = await handy.getSettings();
+                setCurrentStrokeLength(result.stroke);
+                setCurrentStrokeSpeed(result.speed);
+                setCurrentMode(result.mode);
+                console.log(result);
+
+                await handy.setMode(0);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        };
+
+        if(!handy) {
+            setCurrentStrokeLength(0);
+            setCurrentStrokeSpeed(0);
+            return;
+        }
+        getStatus();
+    }, [handy]);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value === "on") {
             setData({ ...data, [e.target.id]: e.target.checked });
@@ -23,322 +54,195 @@ const Play = () => {
         }
     };
 
-    const getVersion = async () => {
-        setWaiting(true);
-        console.log("get version");
-        try {
-            const result = await handy.getVersion();
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const getSettings = async () => {
-        setWaiting(true);
-        console.log("get settings");
-        try {
-            const result = await handy.getSettings();
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const getStatus = async () => {
-        setWaiting(true);
-        console.log("get status");
-        try {
-            const result = await handy.getStatus();
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const setMode = async (mode: number) => {
+    const setMode = useCallback(async (mode: number) => {
         setWaiting(true);
         console.log("set mode " + mode);
         try {
             const result = await handy.setMode(mode);
+            setCurrentMode(result.mode);
             console.log(result);
         } catch (error) {
             console.error(error);
         }
         setWaiting(false);
-    };
+    }, [handy]);
 
-    const toggleMode = async (mode: number) => {
-        setWaiting(true);
-        console.log("toggle mode " + mode);
-        try {
-            const result = await handy.toggleMode(mode);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const setSpeed = async (speed: number, absolute: boolean) => {
-        setWaiting(true);
-        console.log("set speed " + speed + " (absolute: " + absolute + ")");
-        if (absolute) speed *= 4;
-        try {
-            const result = await handy.setSpeed(speed, absolute);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const setStroke = async (stroke: number, absolute: boolean) => {
-        setWaiting(true);
-        console.log("set stroke " + stroke + " (absolute: " + absolute + ")");
-        if (absolute) stroke *= 1.1433;
-        try {
-            const result = await handy.setStroke(stroke, absolute);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const setStrokeZone = async (min: number, max: number) => {
-        setWaiting(true);
-        console.log("set stroke zone " + min + " to " + max);
-        try {
-            const result = await handy.setStrokeZone(min, max);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const stepSpeed = async (up: boolean) => {
+    const stepSpeed = useCallback(async (up: boolean) => {
         setWaiting(true);
         console.log("step speed " + (up ? "up" : "down"));
         try {
             const result = await handy.stepSpeed(up);
+            setCurrentStrokeSpeed(result.speedPercent);
             console.log(result);
         } catch (error) {
             console.error(error);
         }
         setWaiting(false);
-    };
+    }, [handy]);
 
-    const stepStroke = async (up: boolean) => {
+    const stepStroke = useCallback(async (up: boolean) => {
         setWaiting(true);
         console.log("step stroke " + (up ? "up" : "down"));
         try {
             const result = await handy.stepStroke(up);
+            setCurrentStrokeLength(result.strokePercent);
             console.log(result);
         } catch (error) {
             console.error(error);
         }
         setWaiting(false);
-    };
+    }, [handy]);    
 
-    const getServerTimeOffset = async () => {
-        setWaiting(true);
-        console.log("get server time offset");
-        try {
-            const result = await handy.getServerTimeOffset(10);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            switch(e.key) {
+                case "ArrowLeft":
+                    stepSpeed(false);
+                    break;
+                case "ArrowRight":
+                    stepSpeed(true);
+                    break;
+                case "ArrowUp":
+                    stepStroke(true);
+                    break;
+                case "ArrowDown":
+                    stepStroke(false);
+                    break;
+                case "Enter":
+                    if(currentMode === 0) setMode(1);
+                    else setMode(0);
+                    break;
+            }
         }
-        setWaiting(false);
-    };
 
-    const syncPrepare = async (url: string, name?: string, size?: number) => {
-        setWaiting(true);
-        console.log("sync prepare to " + url);
-        try {
-            const result = await handy.syncPrepare(url, name, size);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
+        window.addEventListener('keydown', handleKey);
+        return () => {
+            window.removeEventListener('keydown', handleKey);
         }
-        setWaiting(false);
-    };
-
-    const syncPlay = async (play: boolean) => {
-        setWaiting(true);
-        console.log("sync play");
-        console.log("time is ", new Date().valueOf());
-        try {
-            const result = await handy.syncPlay(play);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
-
-    const syncOffset = async (offset: number) => {
-        setWaiting(true);
-        console.log("sync offset to " + offset);
-        try {
-            const result = await handy.syncOffset(offset);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    };
+    }, [stepSpeed, stepStroke, setMode, currentMode]);
 
     return (
         <Layout>
             <div className={style.manual}>
-                <h1>Debug Controls</h1>
-                <h3>Get Data</h3>
-                <div>
-                    <button disabled={waiting} onClick={() => getVersion()}>
-                        Get Version
-                    </button>
-                    <button disabled={waiting} onClick={() => getSettings()}>
-                        Get Settings
-                    </button>
-                    <button disabled={waiting} onClick={() => getStatus()}>
-                        Get Status
-                    </button>
-                    <button disabled={waiting} onClick={() => getServerTimeOffset()}>
-                        Get Server Time Offset
-                    </button>
+                <div className={style.rawControls}>
+                    <div></div>
+                    <div>
+                        <button
+                            disabled={waiting}
+                            onClick={() => stepStroke(true)}
+                        ><MdKeyboardArrowUp className={style.svgUp}/></button>
+                        <p>Stroke up</p>
+                    </div>
+                    <div></div>
+                    <div>
+                        <button
+                            disabled={waiting}
+                            onClick={() => stepSpeed(false)}
+                        ><MdKeyboardArrowLeft /></button>
+                        <p>Speed down</p>
+                    </div>
+                    <div>
+                        <button
+                            disabled={waiting}
+                            onClick={() => setMode(currentMode === 0 ? 1 : 0)}
+                            className={style.playStop}
+                        >{currentMode === 0 ? <MdPlayArrow /> : <MdStop />}</button>
+                        <p>{currentMode === 0 ? "Start Strokes" : "Stop Strokes"}</p>
+                    </div>
+                    <div>
+                        <button
+                            disabled={waiting}
+                            onClick={() => stepSpeed(true)}
+                        ><MdKeyboardArrowRight /></button>
+                        <p>Speed up</p>
+                    </div>
+                    <div></div>
+                    <div>
+                        <button
+                            disabled={waiting}
+                            onClick={() => stepStroke(false)}
+                        ><MdKeyboardArrowDown className={style.svgDown} /></button>
+                        <p>Stroke down</p>
+                    </div>
+                    <div></div>
                 </div>
-                <h3>Change Mode</h3>
-                <div>
-                    <button disabled={waiting} onClick={() => setMode(0)}>
-                        Set Mode Off
-                    </button>
-                    <button disabled={waiting} onClick={() => setMode(1)}>
-                        Set Mode Auto
-                    </button>
-                    <button disabled={waiting} onClick={() => toggleMode(1)}>
-                        Toggle Mode Auto
-                    </button>
-                </div>
-                <h3>Manual Mode Commands</h3>
-                <div>
-                    <button disabled={waiting} onClick={() => stepSpeed(false)}>
-                        Step Speed Down
-                    </button>
-                    <input
-                        type="range"
-                        id="speed"
-                        min="0"
-                        max="100"
-                        value={data.speed}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="checkbox"
-                        id="speedAbsolute"
-                        checked={data.speedAbsolute}
-                        onChange={handleChange}
-                    />
-                    <button
-                        disabled={waiting}
-                        onClick={() => setSpeed(data.speed, data.speedAbsolute)}
-                    >
-                        Set Speed {data.speedAbsolute ? "mm/s" : "%"}
-                    </button>
-                    <button disabled={waiting} onClick={() => stepSpeed(true)}>
-                        Step Speed Up
-                    </button>
-                </div>
-                <div>
-                    <button disabled={waiting} onClick={() => stepStroke(false)}>
-                        Step Stroke Down
-                    </button>
-                    <input
-                        type="range"
-                        id="stroke"
-                        min="0"
-                        max="100"
-                        value={data.stroke}
-                        onChange={handleChange}
-                    />
-                    <input
-                        type="checkbox"
-                        id="strokeAbsolute"
-                        checked={data.strokeAbsolute}
-                        onChange={handleChange}
-                    />
-                    <button
-                        disabled={waiting}
-                        onClick={() => setStroke(data.stroke, data.strokeAbsolute)}
-                    >
-                        Set Stroke {data.strokeAbsolute ? "mm" : "%"}
-                    </button>
-                    <button disabled={waiting} onClick={() => stepStroke(true)}>
-                        Step Stroke Up
-                    </button>
-                </div>
-                <div>
-                    <input
-                        type="range"
-                        id="zoneMin"
-                        min="0"
-                        max="100"
-                        value={data.zoneMin}
-                        onChange={handleChange}
-                    />
-                    <button
-                        disabled={waiting}
-                        onClick={() => setStrokeZone(data.zoneMin, data.zoneMax)}
-                    >
-                        Set Stroke Zone
-                    </button>
-                    <input
-                        type="range"
-                        id="zoneMax"
-                        min="0"
-                        max="100"
-                        value={data.zoneMax}
-                        onChange={handleChange}
-                    />
-                </div>
-                <h3>Sync Commands</h3>
-                <div>
-                    <button
-                        disabled={waiting}
-                        onClick={() =>
-                            syncPrepare(
-                                "https://sweettecheu.s3.eu-central-1.amazonaws.com/scripts/admin/dataset.csv"
-                            )
-                        }
-                    >
-                        Sync Prepare
-                    </button>
-                    <button disabled={waiting} onClick={() => syncPlay(true)}>
-                        Sync Play
-                    </button>
-                    <button disabled={waiting} onClick={() => syncPlay(false)}>
-                        Sync Pause
-                    </button>
-                    <input
-                        type="range"
-                        id="offset"
-                        min="-500"
-                        max="500"
-                        value={data.offset}
-                        onChange={handleChange}
-                    />
-                    <button disabled={waiting} onClick={() => syncOffset(data.offset)}>
-                        Set Offset
-                    </button>
+                <div className={style.randomize}>
+                    <h2>Randomization</h2>
+                    <div className={style.randomizationControl}>
+                        <label htmlFor="doRandom">Enable Randomize</label>
+                        <input
+                            type="checkbox"
+                            id="doRandom"
+                            checked={data.doRandom}
+                            onChange={handleChange}
+                        />
+                        <p className={style.description}>Randomize will modify the values you set slightly over time</p>
+                    </div>
+                    <div className={style.randomizationControl}>
+                        <label htmlFor="randomizeFrequency">Randomize Frequency</label>
+                        <input
+                            type="range"
+                            id="randomizeFrequency"
+                            min="3"
+                            max="60"
+                            step="1"
+                            value={data.randomizeFrequency}
+                            onChange={handleChange}
+                        />
+                        <p>{data.randomizeFrequency} sec</p>
+                    </div>
+                    <div className={style.randomizationControl}>
+                        <label htmlFor="frequencyVariability">Frequency Variability</label>
+                        <input
+                            type="range"
+                            id="frequencyVariability"
+                            min="0"
+                            max="60"
+                            step="1"
+                            value={data.frequencyVariability}
+                            onChange={handleChange}
+                        />
+                        <p>± {data.frequencyVariability} sec</p>
+                    </div>
+                    <div className={style.randomizationControl}>
+                        <label htmlFor="randomizeSpeedAmount">Speed Variability</label>
+                        <input
+                            type="range"
+                            id="randomizeSpeedAmount"
+                            min="0"
+                            max="100"
+                            step="5"
+                            value={data.randomizeSpeedAmount}
+                            onChange={handleChange}
+                        />
+                        <p>± {data.randomizeSpeedAmount}%</p>
+                    </div>
+                    <div className={style.randomizationControl}>
+                        <label htmlFor="randomizeStrokeAmount">Stroke Variability</label>
+                        <input
+                            type="range"
+                            id="randomizeStrokeAmount"
+                            min="0"
+                            max="100"
+                            step="5"
+                            value={data.randomizeStrokeAmount}
+                            onChange={handleChange}
+                        />
+                        <p>± {data.randomizeStrokeAmount}%</p>
+                    </div>
+                    <p className={style.randomizationSummary}>
+                        {!data.doRandom ? "Your settings will not be randomized" : (<>
+                            {`Every ${Math.round(Math.max(2, Number(data.randomizeFrequency) - Number(data.frequencyVariability)))}-${Math.round(Number(data.randomizeFrequency) + Number(data.frequencyVariability))} seconds:`}
+                            <br/>
+                            {Math.round(data.randomizeStrokeAmount) === 0 ? "Your stroke length will not be randomized" : `Your stroke length will be set to a random value between ${Math.round(Math.max(0, Number(currentStrokeLength) - Number(data.randomizeStrokeAmount)))} and ${Math.round(Math.min(100, Number(currentStrokeLength) + Number(data.randomizeStrokeAmount)))}`}
+                            <br/>
+                            {Math.round(data.randomizeSpeedAmount) === 0 ? "Your stroke speed will not be randomized" : `Your stroke speed will be set to a random value between ${Math.round(Math.max(0, Number(currentStrokeSpeed) - Number(data.randomizeSpeedAmount)))} and ${Math.round(Math.min(100, Number(currentStrokeSpeed) + Number(data.randomizeSpeedAmount)))}`}
+                        </>)}
+                    </p>
                 </div>
             </div>
         </Layout>
     );
 };
 
-export default Play;
+export default Debug;

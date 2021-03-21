@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Play from "./pages/Play";
 import Modify from "./pages/Modify";
 import Manual from "./pages/Manual";
+import Debug from "./pages/Debug";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route exact path={`/play`} component={Play} />
                 <Route exact path={`/modify`} component={Modify} />
                 <Route exact path={`/manual`} component={Manual} />
+                <Route exact path={`/debug`} component={Debug} />
             </Switch>
         </div>
     );

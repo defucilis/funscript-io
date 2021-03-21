@@ -1,23 +1,91 @@
 .manual {
-    margin: 1rem 0 0 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 2fr;
+    padding: 2rem;
+}
+
+.rawControls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 
     > div {
-        width: 100%;
         display: flex;
-        margin-bottom: 1rem;
+        flex-direction: column;
         align-items: center;
     }
 
+    p {
+        text-align: center;
+        margin: 0;
+        color: var(--color-neutral-800);
+        font-size: 0.9rem;
+    }
+
     button {
-        margin-right: 1rem;
+        font-size: 4rem;
+        display: grid;
+        place-items: center;
+        width: 3rem;
+        height: 3rem;
+
+        svg {
+            position: relative;
+            top: -0.7rem;
+            left: -0.95rem;
+        }
+    }
+}
+
+.svgUp {
+    top: -0.7rem !important;
+    left: -0.9rem !important;
+}
+.svgDown {
+    top: -0.5rem !important;
+}
+.playStop {
+   font-size: 3rem !important;
+
+   svg {
+       top: -0.25rem !important;
+       left: -0.5rem !important;
+   }
+}
+
+.randomize {
+    h2 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.randomizationControl {
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    
+    label {
+        width: 12rem;
     }
 
     input[type="checkbox"] {
-        transform: scale(1.5);
-        margin-right: 1rem;
+        transform: scale(2);
     }
 
     input[type="range"] {
+        flex-grow: 2;
         margin-right: 1rem;
+    }
+
+    p {
+        width: 4rem;
+    }
+
+    p.description {
+        flex-grow: 2;
+        margin-left: 1rem;
+        font-style: italic;
+        color: var(--color-neutral-800);
     }
 }
