@@ -64,7 +64,8 @@ const Play = () => {
 
     useEffect(() => {
         if (!funscript || !funscript.metadata) return;
-        setPreviewDuration(funscript.metadata.duration / 5);
+        //setPreviewDuration(funscript.metadata.duration / 50);
+        setPreviewDuration(10000);
         setPreviewPosition(0);
         setLastSyncTime(-1);
     }, [funscript]);

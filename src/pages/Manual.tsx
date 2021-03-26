@@ -2,7 +2,14 @@ import React, { ChangeEvent, useState, useEffect, useCallback } from "react";
 import Layout from "../components/layout/Layout";
 import useHandy from "../lib/HandyReact";
 
-import {MdKeyboardArrowUp, MdKeyboardArrowRight, MdKeyboardArrowLeft, MdKeyboardArrowDown, MdStop, MdPlayArrow} from 'react-icons/md'
+import {
+    MdKeyboardArrowUp,
+    MdKeyboardArrowRight,
+    MdKeyboardArrowLeft,
+    MdKeyboardArrowDown,
+    MdStop,
+    MdPlayArrow,
+} from "react-icons/md";
 
 import style from "./Manual.module.scss";
 
@@ -38,7 +45,7 @@ const Debug = () => {
             setWaiting(false);
         };
 
-        if(!handy) {
+        if (!handy) {
             setCurrentStrokeLength(0);
             setCurrentStrokeSpeed(0);
             return;
@@ -54,48 +61,57 @@ const Debug = () => {
         }
     };
 
-    const setMode = useCallback(async (mode: number) => {
-        setWaiting(true);
-        console.log("set mode " + mode);
-        try {
-            const result = await handy.setMode(mode);
-            setCurrentMode(result.mode);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    }, [handy]);
+    const setMode = useCallback(
+        async (mode: number) => {
+            setWaiting(true);
+            console.log("set mode " + mode);
+            try {
+                const result = await handy.setMode(mode);
+                setCurrentMode(result.mode);
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        },
+        [handy]
+    );
 
-    const stepSpeed = useCallback(async (up: boolean) => {
-        setWaiting(true);
-        console.log("step speed " + (up ? "up" : "down"));
-        try {
-            const result = await handy.stepSpeed(up);
-            setCurrentStrokeSpeed(result.speedPercent);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    }, [handy]);
+    const stepSpeed = useCallback(
+        async (up: boolean) => {
+            setWaiting(true);
+            console.log("step speed " + (up ? "up" : "down"));
+            try {
+                const result = await handy.stepSpeed(up);
+                setCurrentStrokeSpeed(result.speedPercent);
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        },
+        [handy]
+    );
 
-    const stepStroke = useCallback(async (up: boolean) => {
-        setWaiting(true);
-        console.log("step stroke " + (up ? "up" : "down"));
-        try {
-            const result = await handy.stepStroke(up);
-            setCurrentStrokeLength(result.strokePercent);
-            console.log(result);
-        } catch (error) {
-            console.error(error);
-        }
-        setWaiting(false);
-    }, [handy]);    
+    const stepStroke = useCallback(
+        async (up: boolean) => {
+            setWaiting(true);
+            console.log("step stroke " + (up ? "up" : "down"));
+            try {
+                const result = await handy.stepStroke(up);
+                setCurrentStrokeLength(result.strokePercent);
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        },
+        [handy]
+    );
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
-            switch(e.key) {
+            switch (e.key) {
                 case "ArrowLeft":
                     stepSpeed(false);
                     break;
@@ -109,16 +125,16 @@ const Debug = () => {
                     stepStroke(false);
                     break;
                 case "Enter":
-                    if(currentMode === 0) setMode(1);
+                    if (currentMode === 0) setMode(1);
                     else setMode(0);
                     break;
             }
-        }
+        };
 
-        window.addEventListener('keydown', handleKey);
+        window.addEventListener("keydown", handleKey);
         return () => {
-            window.removeEventListener('keydown', handleKey);
-        }
+            window.removeEventListener("keydown", handleKey);
+        };
     }, [stepSpeed, stepStroke, setMode, currentMode]);
 
     return (
@@ -127,18 +143,16 @@ const Debug = () => {
                 <div className={style.rawControls}>
                     <div></div>
                     <div>
-                        <button
-                            disabled={waiting}
-                            onClick={() => stepStroke(true)}
-                        ><MdKeyboardArrowUp className={style.svgUp}/></button>
+                        <button disabled={waiting} onClick={() => stepStroke(true)}>
+                            <MdKeyboardArrowUp className={style.svgUp} />
+                        </button>
                         <p>Stroke up</p>
                     </div>
                     <div></div>
                     <div>
-                        <button
-                            disabled={waiting}
-                            onClick={() => stepSpeed(false)}
-                        ><MdKeyboardArrowLeft /></button>
+                        <button disabled={waiting} onClick={() => stepSpeed(false)}>
+                            <MdKeyboardArrowLeft />
+                        </button>
                         <p>Speed down</p>
                     </div>
                     <div>
@@ -146,22 +160,22 @@ const Debug = () => {
                             disabled={waiting}
                             onClick={() => setMode(currentMode === 0 ? 1 : 0)}
                             className={style.playStop}
-                        >{currentMode === 0 ? <MdPlayArrow /> : <MdStop />}</button>
+                        >
+                            {currentMode === 0 ? <MdPlayArrow /> : <MdStop />}
+                        </button>
                         <p>{currentMode === 0 ? "Start Strokes" : "Stop Strokes"}</p>
                     </div>
                     <div>
-                        <button
-                            disabled={waiting}
-                            onClick={() => stepSpeed(true)}
-                        ><MdKeyboardArrowRight /></button>
+                        <button disabled={waiting} onClick={() => stepSpeed(true)}>
+                            <MdKeyboardArrowRight />
+                        </button>
                         <p>Speed up</p>
                     </div>
                     <div></div>
                     <div>
-                        <button
-                            disabled={waiting}
-                            onClick={() => stepStroke(false)}
-                        ><MdKeyboardArrowDown className={style.svgDown} /></button>
+                        <button disabled={waiting} onClick={() => stepStroke(false)}>
+                            <MdKeyboardArrowDown className={style.svgDown} />
+                        </button>
                         <p>Stroke down</p>
                     </div>
                     <div></div>
@@ -176,7 +190,9 @@ const Debug = () => {
                             checked={data.doRandom}
                             onChange={handleChange}
                         />
-                        <p className={style.description}>Randomize will modify the values you set slightly over time</p>
+                        <p className={style.description}>
+                            Randomize will modify the values you set slightly over time
+                        </p>
                     </div>
                     <div className={style.randomizationControl}>
                         <label htmlFor="randomizeFrequency">Randomize Frequency</label>
@@ -231,13 +247,54 @@ const Debug = () => {
                         <p>± {data.randomizeStrokeAmount}%</p>
                     </div>
                     <p className={style.randomizationSummary}>
-                        {!data.doRandom ? "Your settings will not be randomized" : (<>
-                            {`Every ${Math.round(Math.max(2, Number(data.randomizeFrequency) - Number(data.frequencyVariability)))}-${Math.round(Number(data.randomizeFrequency) + Number(data.frequencyVariability))} seconds:`}
-                            <br/>
-                            {Math.round(data.randomizeStrokeAmount) === 0 ? "Your stroke length will not be randomized" : `Your stroke length will be set to a random value between ${Math.round(Math.max(0, Number(currentStrokeLength) - Number(data.randomizeStrokeAmount)))} and ${Math.round(Math.min(100, Number(currentStrokeLength) + Number(data.randomizeStrokeAmount)))}`}
-                            <br/>
-                            {Math.round(data.randomizeSpeedAmount) === 0 ? "Your stroke speed will not be randomized" : `Your stroke speed will be set to a random value between ${Math.round(Math.max(0, Number(currentStrokeSpeed) - Number(data.randomizeSpeedAmount)))} and ${Math.round(Math.min(100, Number(currentStrokeSpeed) + Number(data.randomizeSpeedAmount)))}`}
-                        </>)}
+                        {!data.doRandom ? (
+                            "Your settings will not be randomized"
+                        ) : (
+                            <>
+                                {`Every ${Math.round(
+                                    Math.max(
+                                        2,
+                                        Number(data.randomizeFrequency) -
+                                            Number(data.frequencyVariability)
+                                    )
+                                )}-${Math.round(
+                                    Number(data.randomizeFrequency) +
+                                        Number(data.frequencyVariability)
+                                )} seconds:`}
+                                <br />
+                                {Math.round(data.randomizeStrokeAmount) === 0
+                                    ? "Your stroke length will not be randomized"
+                                    : `Your stroke length will be set to a random value between ${Math.round(
+                                          Math.max(
+                                              0,
+                                              Number(currentStrokeLength) -
+                                                  Number(data.randomizeStrokeAmount)
+                                          )
+                                      )} and ${Math.round(
+                                          Math.min(
+                                              100,
+                                              Number(currentStrokeLength) +
+                                                  Number(data.randomizeStrokeAmount)
+                                          )
+                                      )}`}
+                                <br />
+                                {Math.round(data.randomizeSpeedAmount) === 0
+                                    ? "Your stroke speed will not be randomized"
+                                    : `Your stroke speed will be set to a random value between ${Math.round(
+                                          Math.max(
+                                              0,
+                                              Number(currentStrokeSpeed) -
+                                                  Number(data.randomizeSpeedAmount)
+                                          )
+                                      )} and ${Math.round(
+                                          Math.min(
+                                              100,
+                                              Number(currentStrokeSpeed) +
+                                                  Number(data.randomizeSpeedAmount)
+                                          )
+                                      )}`}
+                            </>
+                        )}
                     </p>
                 </div>
             </div>
