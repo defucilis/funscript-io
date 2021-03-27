@@ -1,14 +1,18 @@
 .manual {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 2rem;
+    height: 100%;
 }
 
 .rawControls {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    max-width: 400px;
+    height: 300px;
+    margin: 0 auto;
 
     > div {
         display: flex;
@@ -38,6 +42,31 @@
     }
 }
 
+.sliderControls {
+    width: 60%;
+    min-width: 400px;
+    margin: 0 auto;
+
+    > div {
+        height: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        label {
+            margin-right: 1rem;
+        }
+
+        input {
+            flex-grow: 2;
+        }
+
+        p {
+            margin-left: 1rem;
+        }
+    }
+}
+
 .svgUp {
     top: -0.7rem !important;
     left: -0.9rem !important;
@@ -55,6 +84,8 @@
 }
 
 .randomize {
+    margin-top: 2rem;
+
     h2 {
         margin-bottom: 0.5rem;
     }
@@ -87,5 +118,23 @@
         margin-left: 1rem;
         font-style: italic;
         color: var(--color-neutral-800);
+    }
+}
+
+.randomizationSummary {
+    height: 4rem;
+    text-align: center;
+
+    p {
+        margin: 0.5rem 0;
+        text-align: center;
+        color: var(--color-neutral-800);
+        font-style: italic;
+    }
+
+    li {
+        margin: 0.5rem 0;
+        color: var(--color-neutral-800);
+        font-style: italic;
     }
 }

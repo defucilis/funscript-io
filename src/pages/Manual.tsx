@@ -12,20 +12,24 @@ import {
 } from "react-icons/md";
 
 import style from "./Manual.module.scss";
+import Randomizer from "../components/automations/Randomizer";
 
 const Debug = () => {
     const { handy } = useHandy();
     const [waiting, setWaiting] = useState(false);
     const [data, setData] = useState({
         doRandom: false,
-        randomizeFrequency: 10,
-        frequencyVariability: 5,
-        randomizeSpeedAmount: 30,
-        randomizeStrokeAmount: 20,
+        randomizeFrequency: 4,
+        frequencyVariability: 2,
+        randomizeSpeedAmount: 10,
+        randomizeStrokeAmount: 10,
     });
     const [currentStrokeLength, setCurrentStrokeLength] = useState(50);
     const [currentStrokeSpeed, setCurrentStrokeSpeed] = useState(50);
     const [currentMode, setCurrentMode] = useState(0);
+
+    const [newStrokeSpeed, setNewStrokeSpeed] = useState(0);
+    const [newStrokeLength, setNewStrokeLength] = useState(0);
 
     useEffect(() => {
         const getStatus = async () => {
@@ -57,7 +61,7 @@ const Debug = () => {
         if (e.target.value === "on") {
             setData({ ...data, [e.target.id]: e.target.checked });
         } else {
-            setData({ ...data, [e.target.id]: e.target.value });
+            setData({ ...data, [e.target.id]: Number(e.target.value) });
         }
     };
 
@@ -69,12 +73,16 @@ const Debug = () => {
                 const result = await handy.setMode(mode);
                 setCurrentMode(result.mode);
                 console.log(result);
+                if (mode === 1) {
+                    const result = await handy.setSpeed(currentStrokeSpeed);
+                    console.log(result);
+                }
             } catch (error) {
                 console.error(error);
             }
             setWaiting(false);
         },
-        [handy]
+        [handy, currentStrokeSpeed]
     );
 
     const stepSpeed = useCallback(
@@ -100,6 +108,38 @@ const Debug = () => {
             try {
                 const result = await handy.stepStroke(up);
                 setCurrentStrokeLength(result.strokePercent);
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        },
+        [handy]
+    );
+
+    const sendSpeed = useCallback(
+        async (speed: number) => {
+            setWaiting(true);
+            console.log("send speed ", speed);
+            try {
+                const result = await handy.setSpeed(speed);
+                setCurrentStrokeSpeed(speed);
+                console.log(result);
+            } catch (error) {
+                console.error(error);
+            }
+            setWaiting(false);
+        },
+        [handy]
+    );
+
+    const sendStroke = useCallback(
+        async (stroke: number) => {
+            setWaiting(true);
+            console.log("send stroke ", stroke);
+            try {
+                const result = await handy.setStroke(stroke);
+                setCurrentStrokeLength(stroke);
                 console.log(result);
             } catch (error) {
                 console.error(error);
@@ -137,48 +177,108 @@ const Debug = () => {
         };
     }, [stepSpeed, stepStroke, setMode, currentMode]);
 
+    useEffect(() => {
+        setNewStrokeLength(currentStrokeLength);
+    }, [currentStrokeLength]);
+
+    useEffect(() => {
+        setNewStrokeSpeed(currentStrokeSpeed);
+    }, [currentStrokeSpeed]);
+
     return (
         <Layout>
+            <Randomizer
+                enabled={data.doRandom && currentMode === 1}
+                currentStrokeLength={currentStrokeLength}
+                currentStrokeSpeed={currentStrokeSpeed}
+                options={data}
+            />
             <div className={style.manual}>
-                <div className={style.rawControls}>
-                    <div></div>
-                    <div>
-                        <button disabled={waiting} onClick={() => stepStroke(true)}>
-                            <MdKeyboardArrowUp className={style.svgUp} />
-                        </button>
-                        <p>Stroke up</p>
+                <div>
+                    <div className={style.rawControls}>
+                        <div></div>
+                        <div>
+                            <button disabled={waiting} onClick={() => stepStroke(true)}>
+                                <MdKeyboardArrowUp className={style.svgUp} />
+                            </button>
+                            <p>Stroke up</p>
+                        </div>
+                        <div></div>
+                        <div>
+                            <button disabled={waiting} onClick={() => stepSpeed(false)}>
+                                <MdKeyboardArrowLeft />
+                            </button>
+                            <p>Speed down</p>
+                        </div>
+                        <div>
+                            <button
+                                disabled={waiting}
+                                onClick={() => setMode(currentMode === 0 ? 1 : 0)}
+                                className={style.playStop}
+                            >
+                                {currentMode === 0 ? <MdPlayArrow /> : <MdStop />}
+                            </button>
+                            <p>{currentMode === 0 ? "Start Strokes" : "Stop Strokes"}</p>
+                        </div>
+                        <div>
+                            <button disabled={waiting} onClick={() => stepSpeed(true)}>
+                                <MdKeyboardArrowRight />
+                            </button>
+                            <p>Speed up</p>
+                        </div>
+                        <div></div>
+                        <div>
+                            <button disabled={waiting} onClick={() => stepStroke(false)}>
+                                <MdKeyboardArrowDown className={style.svgDown} />
+                            </button>
+                            <p>Stroke down</p>
+                        </div>
+                        <div></div>
                     </div>
-                    <div></div>
-                    <div>
-                        <button disabled={waiting} onClick={() => stepSpeed(false)}>
-                            <MdKeyboardArrowLeft />
-                        </button>
-                        <p>Speed down</p>
+                    <div className={style.sliderControls}>
+                        <div>
+                            <label htmlFor="speed">Stroke Speed</label>
+                            <input
+                                disabled={waiting}
+                                type="range"
+                                id="speed"
+                                value={newStrokeSpeed}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setNewStrokeSpeed(Number(e.target.value))
+                                }
+                                onMouseUp={() => {
+                                    if (newStrokeSpeed !== currentStrokeSpeed) {
+                                        sendSpeed(newStrokeSpeed);
+                                    }
+                                }}
+                            />
+                            <p>{Math.round(newStrokeSpeed)}%</p>
+                        </div>
+                        <div>
+                            <label htmlFor="stroke">Stroke Length</label>
+                            <input
+                                disabled={waiting}
+                                type="range"
+                                id="stroke"
+                                value={newStrokeLength}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setNewStrokeLength(Number(e.target.value))
+                                }
+                                onMouseUp={() => {
+                                    if (newStrokeLength !== currentStrokeLength) {
+                                        sendStroke(newStrokeLength);
+                                    }
+                                }}
+                            />
+                            <p>{Math.round(newStrokeLength)}%</p>
+                        </div>
                     </div>
-                    <div>
-                        <button
-                            disabled={waiting}
-                            onClick={() => setMode(currentMode === 0 ? 1 : 0)}
-                            className={style.playStop}
-                        >
-                            {currentMode === 0 ? <MdPlayArrow /> : <MdStop />}
-                        </button>
-                        <p>{currentMode === 0 ? "Start Strokes" : "Stop Strokes"}</p>
-                    </div>
-                    <div>
-                        <button disabled={waiting} onClick={() => stepSpeed(true)}>
-                            <MdKeyboardArrowRight />
-                        </button>
-                        <p>Speed up</p>
-                    </div>
-                    <div></div>
-                    <div>
-                        <button disabled={waiting} onClick={() => stepStroke(false)}>
-                            <MdKeyboardArrowDown className={style.svgDown} />
-                        </button>
-                        <p>Stroke down</p>
-                    </div>
-                    <div></div>
                 </div>
                 <div className={style.randomize}>
                     <h2>Randomization</h2>
@@ -199,8 +299,8 @@ const Debug = () => {
                         <input
                             type="range"
                             id="randomizeFrequency"
-                            min="3"
-                            max="60"
+                            min="2"
+                            max="12"
                             step="1"
                             value={data.randomizeFrequency}
                             onChange={handleChange}
@@ -213,7 +313,7 @@ const Debug = () => {
                             type="range"
                             id="frequencyVariability"
                             min="0"
-                            max="60"
+                            max="10"
                             step="1"
                             value={data.frequencyVariability}
                             onChange={handleChange}
@@ -226,7 +326,7 @@ const Debug = () => {
                             type="range"
                             id="randomizeSpeedAmount"
                             min="0"
-                            max="100"
+                            max="50"
                             step="5"
                             value={data.randomizeSpeedAmount}
                             onChange={handleChange}
@@ -239,7 +339,7 @@ const Debug = () => {
                             type="range"
                             id="randomizeStrokeAmount"
                             min="0"
-                            max="100"
+                            max="50"
                             step="5"
                             value={data.randomizeStrokeAmount}
                             onChange={handleChange}
@@ -248,51 +348,57 @@ const Debug = () => {
                     </div>
                     <p className={style.randomizationSummary}>
                         {!data.doRandom ? (
-                            "Your settings will not be randomized"
+                            <p>Your settings will not be randomized</p>
                         ) : (
                             <>
-                                {`Every ${Math.round(
-                                    Math.max(
-                                        2,
-                                        Number(data.randomizeFrequency) -
+                                <p>
+                                    {`Every ${Math.round(
+                                        Math.max(
+                                            2,
+                                            Number(data.randomizeFrequency) -
+                                                Number(data.frequencyVariability)
+                                        )
+                                    )} - ${Math.round(
+                                        Number(data.randomizeFrequency) +
                                             Number(data.frequencyVariability)
-                                    )
-                                )}-${Math.round(
-                                    Number(data.randomizeFrequency) +
-                                        Number(data.frequencyVariability)
-                                )} seconds:`}
-                                <br />
-                                {Math.round(data.randomizeStrokeAmount) === 0
-                                    ? "Your stroke length will not be randomized"
-                                    : `Your stroke length will be set to a random value between ${Math.round(
-                                          Math.max(
-                                              0,
-                                              Number(currentStrokeLength) -
-                                                  Number(data.randomizeStrokeAmount)
-                                          )
-                                      )} and ${Math.round(
-                                          Math.min(
-                                              100,
-                                              Number(currentStrokeLength) +
-                                                  Number(data.randomizeStrokeAmount)
-                                          )
-                                      )}`}
-                                <br />
-                                {Math.round(data.randomizeSpeedAmount) === 0
-                                    ? "Your stroke speed will not be randomized"
-                                    : `Your stroke speed will be set to a random value between ${Math.round(
-                                          Math.max(
-                                              0,
-                                              Number(currentStrokeSpeed) -
-                                                  Number(data.randomizeSpeedAmount)
-                                          )
-                                      )} and ${Math.round(
-                                          Math.min(
-                                              100,
-                                              Number(currentStrokeSpeed) +
-                                                  Number(data.randomizeSpeedAmount)
-                                          )
-                                      )}`}
+                                    )} seconds:`}
+                                </p>
+                                <ul>
+                                    <li>
+                                        {Math.round(data.randomizeStrokeAmount) === 0
+                                            ? "Your stroke length will not be randomized"
+                                            : `Your stroke length will be set to a random value between ${Math.round(
+                                                  Math.max(
+                                                      0,
+                                                      Number(currentStrokeLength) -
+                                                          Number(data.randomizeStrokeAmount)
+                                                  )
+                                              )} and ${Math.round(
+                                                  Math.min(
+                                                      100,
+                                                      Number(currentStrokeLength) +
+                                                          Number(data.randomizeStrokeAmount)
+                                                  )
+                                              )}`}
+                                    </li>
+                                    <li>
+                                        {Math.round(data.randomizeSpeedAmount) === 0
+                                            ? "Your stroke speed will not be randomized"
+                                            : `Your stroke speed will be set to a random value between ${Math.round(
+                                                  Math.max(
+                                                      0,
+                                                      Number(currentStrokeSpeed) -
+                                                          Number(data.randomizeSpeedAmount)
+                                                  )
+                                              )} and ${Math.round(
+                                                  Math.min(
+                                                      100,
+                                                      Number(currentStrokeSpeed) +
+                                                          Number(data.randomizeSpeedAmount)
+                                                  )
+                                              )}`}
+                                    </li>
+                                </ul>
                             </>
                         )}
                     </p>
