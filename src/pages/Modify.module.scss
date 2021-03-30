@@ -1,0 +1,154 @@
+.modify {
+    width: 100%;
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.sideBySide {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+
+    > div {
+        width: 50%;
+    }
+}
+
+.dropzone {
+    height: 16rem;
+    border: 1px dashed var(--color-neutral-700);
+    // display: grid;
+    // place-items: center;
+    background-color: rgba(255, 255, 255, 0);
+    transition: all 0.3s;
+    position: relative;
+
+    > div {
+        display: grid;
+        place-items: center;
+        grid-template-rows: 1fr 1fr;
+        padding: 2rem;
+        height: 100%;
+    }
+
+    svg {
+        color: var(--color-neutral-700);
+        font-size: 6rem;
+        transition: all 0.3s;
+    }
+
+    p {
+        color: var(--color-text);
+        font-size: 1.5rem;
+        text-align: center;
+        height: 3rem;
+        margin: 0;
+    }
+
+    p.dropError {
+        position: absolute;
+        bottom: 0;
+        font-size: 1.2rem;
+        color: var(--color-red-700);
+    }
+}
+
+.active {
+    border: 1px dashed var(--color-text);
+    background-color: rgba(255, 255, 255, 0.2);
+
+    svg {
+        color: var(--color-theme-500);
+    }
+}
+
+.error {
+    color: var(--color-red-700);
+    font-size: 1.2rem;
+
+    button {
+        background-color: var(--color-red-700);
+    }
+}
+
+.funscriptPreview {
+    position: absolute;
+    top: 1rem;
+    z-index: 5;
+    height: 16rem;
+    width: calc(100% - 2rem);
+    pointer-events: none;
+}
+
+.heatmaps {
+    margin-top: 1rem;
+}
+
+.infoAndSave {
+    height: 16rem;
+    display: grid;
+    place-items: center;
+
+    a {
+        background-color: var(--color-theme-500);
+        font-size: 1.2rem;
+        padding: 0.5rem 1rem;
+        color: black;
+        border-radius: 2px;
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}
+
+.metadata {
+    width: 100%;
+    text-align: center;
+
+    > div {
+        display: inline-flex;
+        gap: 1rem;
+    }
+
+    p {
+        margin: 0;
+    }
+}
+
+.operations {
+    display: flex;
+    margin-top: 4rem;
+    height: 50%;
+
+    .list {
+        width: 12rem;
+
+        li {
+            margin: 0.5rem 0;
+            font-size: 1.2rem;
+            background-color: var(--color-neutral-700);
+            color: black;
+            text-align: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 2px;
+            cursor: pointer;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        .selected {
+            background-color: var(--color-theme-500);
+        }
+    }
+
+    .page {
+        margin-left: 4rem;
+    }
+}

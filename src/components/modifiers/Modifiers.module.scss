@@ -1,0 +1,43 @@
+.modifier {
+    h2 {
+        margin-bottom: 0;
+    }
+
+    button {
+        margin-bottom: 1rem;
+        padding: 0.25rem 1rem;
+    }
+}
+
+.description {
+    color: var(--color-neutral-600);
+    font-style: italic;
+    margin-top: 0;
+}
+
+.control {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+
+    label {
+        width: 16rem;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+
+    input {
+        font-size: 1.2rem;
+        background-color: var(--color-neutral-300);
+        padding: 0.25rem 0.5rem;
+
+        &[type="checkbox"] {
+            transform: scale(2);
+        }
+    }
+
+    p {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+}

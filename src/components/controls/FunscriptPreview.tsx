@@ -4,7 +4,7 @@ import { Funscript } from "funscript-utils/lib/types";
 import { renderActions, ActionsOptions } from "funscript-utils/lib/funMapper";
 
 const FunscriptPreview = ({
-    funscript,
+    funscripts,
     width,
     height,
     options,
@@ -14,10 +14,10 @@ const FunscriptPreview = ({
     onMouseMove,
     onWheel,
 }: {
-    funscript: Funscript;
+    funscripts: Funscript[];
     width: number;
     height: number;
-    options?: ActionsOptions;
+    options?: ActionsOptions[];
     hoverDisplayDuration?: number;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
@@ -32,15 +32,23 @@ const FunscriptPreview = ({
 
     useEffect(() => {
         if (canvasRef.current) {
-            if (funscript) {
-                if (options) renderActions(canvasRef.current, funscript, options);
-                else renderActions(canvasRef.current, funscript);
+            if (funscripts.length > 0) {
+                for (let i = 0; i < funscripts.length; i++) {
+                    if (options[i]) renderActions(canvasRef.current, funscripts[i], options[i]);
+                    else renderActions(canvasRef.current, funscripts[i]);
+                }
             } else {
                 canvasRef.current.getContext("2d").clearRect(0, 0, width, height);
             }
         }
-        setFunscriptDuration(funscript ? funscript.actions.slice(-1)[0].at : 1);
-    }, [funscript, height, width, options]);
+        setFunscriptDuration(
+            funscripts.reduce(
+                (acc: number, funscript: Funscript) =>
+                    Math.max(acc, funscript.actions.slice(-1)[0].at),
+                1
+            )
+        );
+    }, [funscripts, height, width, options]);
 
     useEffect(() => {
         if (!localMousePos) {
@@ -48,11 +56,11 @@ const FunscriptPreview = ({
             return;
         }
         overlayRef.current.style.setProperty("display", "block");
-        const durationAsWidth = (hoverDisplayDuration / funscript.actions.slice(-1)[0].at) * width;
+        const durationAsWidth = (hoverDisplayDuration / funscriptDuration) * width;
         const min = Math.max(0, localMousePos.x * width - durationAsWidth * 0.5);
         overlayRef.current.style.setProperty("left", min + "px");
         overlayRef.current.style.setProperty("width", durationAsWidth + "px");
-    }, [funscript.actions, hoverDisplayDuration, localMousePos, width]);
+    }, [funscriptDuration, hoverDisplayDuration, localMousePos, width]);
 
     useEffect(() => {
         if (!localMousePos) return;

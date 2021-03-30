@@ -455,17 +455,19 @@ const Play = () => {
                         <div className={style.preview} ref={previewRef}>
                             {!funscript || !showingPreview ? null : (
                                 <FunscriptPreview
-                                    funscript={funscript}
+                                    funscripts={[funscript]}
                                     width={!previewRef.current ? 1 : previewRef.current.offsetWidth}
                                     height={
                                         !previewRef.current ? 1 : previewRef.current.offsetHeight
                                     }
-                                    options={{
-                                        clear: true,
-                                        background: "rgba(0,0,0,0.5)",
-                                        startTime: previewPosition,
-                                        duration: previewDuration,
-                                    }}
+                                    options={[
+                                        {
+                                            clear: true,
+                                            background: "rgba(0,0,0,0.5)",
+                                            startTime: previewPosition,
+                                            duration: previewDuration,
+                                        },
+                                    ]}
                                 />
                             )}
                         </div>
