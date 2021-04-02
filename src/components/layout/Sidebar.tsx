@@ -39,6 +39,14 @@ const Sidebar = () => {
                             <span className={style.navText}>Manual mode</span>
                         </Link>
                     </li>
+                    <li className={location.pathname === "/auto" ? style.selected : null}>
+                        <Link to={`/auto`}>
+                            <span className={style.navIcon} style={{ top: 0 }}>
+                                A
+                            </span>
+                            <span className={style.navText}>Auto mode</span>
+                        </Link>
+                    </li>
                     <li className={location.pathname === "/browse" ? style.selected : null}>
                         <a href="https://scriptaxis.com" target="_blank" rel="noopener noreferrer">
                             <span className={style.navIcon}>
