@@ -47,14 +47,6 @@ const Sidebar = () => {
                             <span className={style.navText}>Auto mode</span>
                         </Link>
                     </li>
-                    <li className={location.pathname === "/browse" ? style.selected : null}>
-                        <a href="https://scriptaxis.com" target="_blank" rel="noopener noreferrer">
-                            <span className={style.navIcon}>
-                                <MdLink />
-                            </span>
-                            <span className={style.navText}>Find more scripts</span>
-                        </a>
-                    </li>
                     <li className={location.pathname === "/modify" ? style.selected : null}>
                         <Link to={`/modify`}>
                             <span className={style.navIcon}>
@@ -67,6 +59,16 @@ const Sidebar = () => {
                 <ul className={style.sidebarNav}>
                     <li>
                         <HandyConnection />
+                    </li>
+                </ul>
+                <ul className={style.sidebarNav}>
+                    <li className={location.pathname === "/browse" ? style.selected : null} style={{height: "4rem"}}>
+                        <a href="https://scriptaxis.com" target="_blank" rel="noopener noreferrer">
+                            <span className={style.navIcon}>
+                                <MdLink />
+                            </span>
+                            <span className={style.navText}>Find more scripts at ScriptAxis.com</span>
+                        </a>
                     </li>
                 </ul>
             </div>
