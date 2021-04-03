@@ -1,10 +1,66 @@
-# Funscript.io
+<h1 align="center">
+  <a href='https://github.com/defucilis/funscript-io'>Funscript.io</a> - Create, Modify, Enjoy Funscripts
+</h1>
 
-Hello! If you're here, you're a little early. Right now, funscript.io is a personal project that I'm not really talking about. For now, it's just for my use, but feel free to go try it out. The site is live at [https://funscript.io](https://funscript.io).
+*Funscript.io is kind of meant to be a one-stop-shop for a variety of funscript-related tasks. It features an easy-to-use, fully-featured script player, funscript tweaking and modification tools, as well as some interesting new ways to control your Handy!*
 
-There are a few broad categories of things that I want to do with the site:
+*I’ve been tinkering with and using the site for ages, adding new features every so-often, and I think it’s is at a point now where it might be useful for other people. I add new features all the time, so check back here every once-in-a-while to see what new stuff I’ve added!*
 
-1. Allow people to play scripts locally - kind of like HandyFeeling, but a little more reliable and feature-rich (actually, the main reason I started this whole project was because I wanted to be able to change sync offset with the arrow keys haha)
-2. Control the Handy manually, with many more features than the basic "increase/decrease stroke length, increase/decrease speed" options.
-3. Fine-tune and modify funscripts - things like offsetting the entire script's start time, halving/doubling the speed, remapping stroke length, etc.
-4. Find more great funscripts! I might even end up combining funscript.io and scriptaxis.com for this purpose...
+<h2 align="center"><a href="https://discuss.eroscripts.com/t/funscript-io-a-website-for-playing-modifying-and-generating-funscripts/20624">EroScripts Thread</a></h2>
+
+### 🌈 Features
+
+  * A better local-video script player than HandyFeeling.com (at least, I think so!)
+    * Change script offset with keyboard arrows
+    * PornHub-style minimal progress bar ion fullscreen video
+    * Script heatmap, preview and metadata integrated
+  * Easy to use script-modification features:
+    * Heatmap generation + funscript preview browser
+    * [FunHalver](https://discuss.eroscripts.com/t/funhalver-0-3-0-make-any-funscript-half-speed-without-losing-sync-or-stroke-length/13497) fully integrated
+    * Add positive/negative offset to a script in seconds
+    * Remap script lengths (change minimum and maximum stroke positions)
+    * More coming soon!
+  * A better manual-mode interface:
+    * Keyboard controls
+    * Integrated randomizer for subtle variation
+  * Procedural funscript generation:
+    * Automatic stroke speed cycler for edging
+    * *Much* more to come!!!
+
+
+---
+
+### 🌠 Planned Features:
+
+  * Lots of bugfixes - the site is still pretty experimental, but very functional!
+  * Proper smartphone support
+  * More script modification functions - FunDoubler, Randomizer, Limiter
+  * Funscript metadata editor
+  * Additional, more complex procedural funscript generation methods
+  * Audiovisual content to go along with generated funscripts
+  * Potentially tighter integration with [ScriptAxis](https://discuss.eroscripts.com/t/scriptaxis-a-searchable-sortable-filterable-funscript-directory/10409)
+
+---
+
+### ⚗️ Potential Features:
+  * An integrated funscript editor, to make specific tweaks to a script (or perhaps create an entirely new script!)
+  * A multi-control interface for creating and running rooms
+  * Combine the whole site with ScriptAxis, to make one glorious mega-site?!
+
+---
+
+### 👩‍💻 Technologies
+
+  * React (Create-React-App)
+  * TypeScript
+  * Axios
+  * DayJS
+  * React-Dropzone
+  * React-Markdown
+  * React-Icons
+  * React-Player
+  * React-Spinners
+  * SASS
+  * Funscript-Utils
+  * TheHandy
+  * Prettier
