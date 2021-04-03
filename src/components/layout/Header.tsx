@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { version } from "../../../package.json";
-import style from "./Navbar.module.scss";
+import {FaGithub} from 'react-icons/fa'
 
-const Navbar = () => {
+import { version } from "../../../package.json";
+import style from "./Header.module.scss";
+
+const Header = () => {
     return (
         <nav className={style.mainNav}>
             <div className={style.logo}>
@@ -16,11 +18,13 @@ const Navbar = () => {
             </div>
             <ul>
                 <li>
-                    <p>Things can go here</p>
+                    <a className={style.github} href={"https://github.com/defucilis/funscript-io"} target="_blank">
+                        <FaGithub />
+                    </a>
                 </li>
             </ul>
         </nav>
     );
 };
 
-export default Navbar;
+export default Header;

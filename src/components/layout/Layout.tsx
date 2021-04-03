@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import Navbar from "./Navbar";
+import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 import style from "./Layout.module.scss";
@@ -8,7 +8,7 @@ import style from "./Layout.module.scss";
 const Layout = ({ children }: { children: ReactNode }) => {
     return (
         <>
-            <Navbar />
+            <Header />
             <div className={style.layout}>
                 <Sidebar />
                 <div className={style.container}>{children}</div>
