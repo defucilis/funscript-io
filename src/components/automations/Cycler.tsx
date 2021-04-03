@@ -82,6 +82,7 @@ const Cycler = ({
 
     useEffect(() => {
         setMode(enabled ? 1 : 0);
+        if(enabled) nextCommandTime.current = -10;
     }, [enabled, setMode]);
 
     const animationCallback = (runTime: number, deltaTime: number) => {
@@ -100,6 +101,8 @@ const Cycler = ({
         }
 
         if (!enabled) return;
+
+        if(nextCommandTime.current < 0) nextCommandTime.current = runTime;
 
         if (runTime > nextCommandTime.current) {
             const afterFinish = options.sessionDuration > 0 && runTime > (options.sessionDuration * 60);
