@@ -27,14 +27,22 @@ const Randomizer = ({
 
     const sendNewSpeed = useCallback(
         async (speed: number) => {
-            await handy.setSpeed(speed);
+            try {
+                await handy.setSpeed(speed);
+            } catch(error) {
+                console.error(error);
+            }
         },
         [handy]
     );
 
     const sendNewStroke = useCallback(
         async (stroke: number) => {
-            await handy.setStroke(stroke);
+            try {
+                await handy.setStroke(stroke);
+            } catch(error) {
+                console.error(error);
+            }
         },
         [handy]
     );

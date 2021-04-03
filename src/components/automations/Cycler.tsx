@@ -34,14 +34,22 @@ const Cycler = ({
 
     const setMode = useCallback(
         async (mode: number) => {
-            await handy.setMode(mode);
+            try {
+                await handy.setMode(mode);
+            } catch(error) {
+                console.error(error);
+            }
         },
         [handy]
     );
 
     const sendNewSpeed = useCallback(
         async (speed: number) => {
-            await handy.setSpeed(speed);
+            try {
+                await handy.setSpeed(speed);
+            } catch(error) {
+                console.error(error);
+            }
         },
         [handy]
     );
@@ -49,7 +57,11 @@ const Cycler = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sendNewStroke = useCallback(
         async (stroke: number) => {
-            await handy.setStroke(stroke);
+            try {
+                await handy.setStroke(stroke);
+            } catch(error) {
+                console.error(error);
+            }
         },
         [handy]
     );
@@ -57,7 +69,7 @@ const Cycler = ({
     useEffect(() => {
         sendNewSpeed(currentSpeed);
         if(onSpeedChanged) onSpeedChanged(currentSpeed);
-    }, [currentSpeed, onSpeedChanged, currentSpeed])
+    }, [currentSpeed, onSpeedChanged, currentSpeed, sendNewSpeed])
 
     const easeIn = (t: number) => {
         return Math.pow(t, 2.5);
@@ -70,7 +82,7 @@ const Cycler = ({
 
     useEffect(() => {
         setMode(enabled ? 1 : 0);
-    }, [enabled]);
+    }, [enabled, setMode]);
 
     const animationCallback = (runTime: number, deltaTime: number) => {
         //console.log({runTime, next: nextCommandTime.current})
@@ -100,7 +112,7 @@ const Cycler = ({
                 else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - 0.5) * 2);
             }
 
-            console.log({options, afterFinish, longAfterFinish, cycleX, cycleValue});
+            //console.log({options, afterFinish, longAfterFinish, cycleX, cycleValue});
 
             const speed = Math.round(options.minSpeed + (options.maxSpeed - options.minSpeed) * cycleValue);
             if(speed !== currentSpeed) setCurrentSpeed(speed);
