@@ -365,23 +365,6 @@ const Debug = () => {
                                 </p>
                                 <ul>
                                     <li>
-                                        {Math.round(data.randomizeStrokeAmount) === 0
-                                            ? "Your stroke length will not be randomized"
-                                            : `Your stroke length will be set to a random value between ${Math.round(
-                                                  Math.max(
-                                                      0,
-                                                      Number(currentStrokeLength) -
-                                                          Number(data.randomizeStrokeAmount)
-                                                  )
-                                              )} and ${Math.round(
-                                                  Math.min(
-                                                      100,
-                                                      Number(currentStrokeLength) +
-                                                          Number(data.randomizeStrokeAmount)
-                                                  )
-                                              )}`}
-                                    </li>
-                                    <li>
                                         {Math.round(data.randomizeSpeedAmount) === 0
                                             ? "Your stroke speed will not be randomized"
                                             : `Your stroke speed will be set to a random value between ${Math.round(
@@ -395,6 +378,23 @@ const Debug = () => {
                                                       100,
                                                       Number(currentStrokeSpeed) +
                                                           Number(data.randomizeSpeedAmount)
+                                                  )
+                                              )}`}
+                                    </li>
+                                    <li>
+                                        {Math.round(data.randomizeStrokeAmount) === 0
+                                            ? "Your stroke length will not be randomized"
+                                            : `Your stroke length will be set to a random value between ${Math.round(
+                                                  Math.max(
+                                                      0,
+                                                      Number(currentStrokeLength) -
+                                                          Number(data.randomizeStrokeAmount)
+                                                  )
+                                              )} and ${Math.round(
+                                                  Math.min(
+                                                      100,
+                                                      Number(currentStrokeLength) +
+                                                          Number(data.randomizeStrokeAmount)
                                                   )
                                               )}`}
                                     </li>
