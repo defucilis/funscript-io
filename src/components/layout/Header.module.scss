@@ -90,9 +90,13 @@
     margin-top: 0.4em;
 }
 
-.github {
+.iconLink {
 
-    > svg {
+    a {
+        padding: 0 0.5rem;
+    }
+
+    svg {
         color: white;
         font-size: 1.5rem;
     }
