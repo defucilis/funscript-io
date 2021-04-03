@@ -26,11 +26,7 @@ const Auto = () => {
 
     return (
         <Layout>
-            <Cycler
-                enabled={enabled}
-                options={data}
-                onSpeedChanged={setSpeed}
-            />
+            <Cycler enabled={enabled} options={data} onSpeedChanged={setSpeed} />
             <div className={style.auto}>
                 <div className={style.cycler}>
                     <h2>Cycler</h2>
@@ -87,7 +83,11 @@ const Auto = () => {
                             value={data.sessionDuration}
                             onChange={handleChange}
                         />
-                        <p>{data.sessionDuration === 0 ? "Infinite" : (data.sessionDuration + " min")}</p>
+                        <p>
+                            {data.sessionDuration === 0
+                                ? "Infinite"
+                                : data.sessionDuration + " min"}
+                        </p>
                     </div>
                     <div className={style.control}>
                         <label htmlFor="setSpeedInterval">Set Speed Interval</label>
@@ -102,7 +102,9 @@ const Auto = () => {
                         />
                         <p>{data.setSpeedInterval} sec</p>
                     </div>
-                    <button onClick={() => setEnabled(!enabled)}>{enabled ? "Stop Session" : "Start Session"}</button>
+                    <button onClick={() => setEnabled(!enabled)}>
+                        {enabled ? "Stop Session" : "Start Session"}
+                    </button>
                 </div>
             </div>
         </Layout>

@@ -29,7 +29,7 @@ const Randomizer = ({
         async (speed: number) => {
             try {
                 await handy.setSpeed(speed);
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         },
@@ -40,7 +40,7 @@ const Randomizer = ({
         async (stroke: number) => {
             try {
                 await handy.setStroke(stroke);
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         },

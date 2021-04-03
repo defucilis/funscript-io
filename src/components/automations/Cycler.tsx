@@ -18,7 +18,7 @@ const Cycler = ({
         maxSpeed: 80,
         cycleDuration: 60,
         sessionDuration: 0,
-        setSpeedInterval: 0.5
+        setSpeedInterval: 0.5,
     },
     onSpeedChanged,
 }: {
@@ -36,7 +36,7 @@ const Cycler = ({
         async (mode: number) => {
             try {
                 await handy.setMode(mode);
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         },
@@ -47,7 +47,7 @@ const Cycler = ({
         async (speed: number) => {
             try {
                 await handy.setSpeed(speed);
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         },
@@ -59,7 +59,7 @@ const Cycler = ({
         async (stroke: number) => {
             try {
                 await handy.setStroke(stroke);
-            } catch(error) {
+            } catch (error) {
                 console.error(error);
             }
         },
@@ -68,21 +68,21 @@ const Cycler = ({
 
     useEffect(() => {
         sendNewSpeed(currentSpeed);
-        if(onSpeedChanged) onSpeedChanged(currentSpeed);
-    }, [currentSpeed, onSpeedChanged, currentSpeed, sendNewSpeed])
+        if (onSpeedChanged) onSpeedChanged(currentSpeed);
+    }, [currentSpeed, onSpeedChanged, sendNewSpeed]);
 
     const easeIn = (t: number) => {
         return Math.pow(t, 2.5);
-    }
+    };
 
     const easeOut = (t: number) => {
         t = 1.0 - t;
         return Math.pow(t, 2.5);
-    }
+    };
 
     useEffect(() => {
         setMode(enabled ? 1 : 0);
-        if(enabled) nextCommandTime.current = -10;
+        if (enabled) nextCommandTime.current = -10;
     }, [enabled, setMode]);
 
     const animationCallback = (runTime: number, deltaTime: number) => {
@@ -102,23 +102,27 @@ const Cycler = ({
 
         if (!enabled) return;
 
-        if(nextCommandTime.current < 0) nextCommandTime.current = runTime;
+        if (nextCommandTime.current < 0) nextCommandTime.current = runTime;
 
         if (runTime > nextCommandTime.current) {
-            const afterFinish = options.sessionDuration > 0 && runTime > (options.sessionDuration * 60);
-            const longAfterFinish = afterFinish && runTime > ((options.sessionDuration * 60) + options.cycleDuration);
+            const afterFinish =
+                options.sessionDuration > 0 && runTime > options.sessionDuration * 60;
+            const longAfterFinish =
+                afterFinish && runTime > options.sessionDuration * 60 + options.cycleDuration;
             const cycleX = (runTime % options.cycleDuration) / options.cycleDuration;
             let cycleValue: number;
-            if(longAfterFinish) cycleValue = 1.0;
+            if (longAfterFinish) cycleValue = 1.0;
             else {
-                if(cycleX < 0.5) cycleValue = easeIn(cycleX * 2);
+                if (cycleX < 0.5) cycleValue = easeIn(cycleX * 2);
                 else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - 0.5) * 2);
             }
 
             //console.log({options, afterFinish, longAfterFinish, cycleX, cycleValue});
 
-            const speed = Math.round(options.minSpeed + (options.maxSpeed - options.minSpeed) * cycleValue);
-            if(speed !== currentSpeed) setCurrentSpeed(speed);
+            const speed = Math.round(
+                options.minSpeed + (options.maxSpeed - options.minSpeed) * cycleValue
+            );
+            if (speed !== currentSpeed) setCurrentSpeed(speed);
 
             nextCommandTime.current += options.setSpeedInterval;
         }

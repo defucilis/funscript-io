@@ -7,7 +7,6 @@ import style from "./Layout.module.scss";
 import MobileWarning from "./MobileWarning";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-
     const [wideEnough, setWideEnough] = useState(true);
 
     useEffect(() => {
@@ -17,17 +16,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
         setWideEnough(window.innerWidth > 900);
 
         return () => window.removeEventListener("resize", handleResize);
-    })
+    }, []);
 
     return (
         <>
             <Header />
             <div className={style.layout}>
-                { wideEnough ? <Sidebar /> : null }
-                { wideEnough 
-                    ? <div className={style.container}>{children}</div>
-                    : <MobileWarning />
-                }
+                {wideEnough ? <Sidebar /> : null}
+                {wideEnough ? <div className={style.container}>{children}</div> : <MobileWarning />}
             </div>
         </>
     );

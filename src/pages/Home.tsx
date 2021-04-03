@@ -3,7 +3,7 @@ import React from "react";
 import Layout from "../components/layout/Layout";
 import StackedContentPage from "../components/layout/StackedContentPage";
 
-import style from "./Home.module.scss"
+import style from "./Home.module.scss";
 
 const Home = () => {
     return (

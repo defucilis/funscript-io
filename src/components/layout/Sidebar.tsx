@@ -62,12 +62,17 @@ const Sidebar = () => {
                     </li>
                 </ul>
                 <ul className={style.sidebarNav}>
-                    <li className={location.pathname === "/browse" ? style.selected : null} style={{height: "4rem"}}>
+                    <li
+                        className={location.pathname === "/browse" ? style.selected : null}
+                        style={{ height: "4rem" }}
+                    >
                         <a href="https://scriptaxis.com" target="_blank" rel="noopener noreferrer">
                             <span className={style.navIcon}>
                                 <MdLink />
                             </span>
-                            <span className={style.navText}>Find more scripts at ScriptAxis.com</span>
+                            <span className={style.navText}>
+                                Find more scripts at ScriptAxis.com
+                            </span>
                         </a>
                     </li>
                 </ul>
