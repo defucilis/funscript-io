@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useState } from "react";
 import Layout from "../components/layout/Layout";
 
-import style from "./Manual.module.scss";
+import style from "./Auto.module.scss";
 import Cycler, { CyclerOptions } from "../components/automations/Cycler";
+import ProgressBar from "../components/utility/ProgressBar";
 
 const Auto = () => {
     const [enabled, setEnabled] = useState(false);
@@ -30,12 +31,13 @@ const Auto = () => {
                 options={data}
                 onSpeedChanged={setSpeed}
             />
-            <div className={style.manual}>
-                <div className={style.randomize}>
+            <div className={style.auto}>
+                <div className={style.cycler}>
                     <h2>Cycler</h2>
-                    <p>Speed is {speed}</p>
-                    <button onClick={() => setEnabled(!enabled)}>{enabled ? "Stop Session" : "Start Session"}</button>
-                    <div className={style.randomizationControl}>
+                    <ProgressBar progress={speed / 100} className={style.progressBar}>
+                        <p>Speed: {speed}</p>
+                    </ProgressBar>
+                    <div className={style.control}>
                         <label htmlFor="minSpeed">Minimum Speed</label>
                         <input
                             type="range"
@@ -48,7 +50,7 @@ const Auto = () => {
                         />
                         <p>{data.minSpeed}%</p>
                     </div>
-                    <div className={style.randomizationControl}>
+                    <div className={style.control}>
                         <label htmlFor="maxSpeed">Maximum Speed</label>
                         <input
                             type="range"
@@ -61,7 +63,7 @@ const Auto = () => {
                         />
                         <p>{data.maxSpeed}%</p>
                     </div>
-                    <div className={style.randomizationControl}>
+                    <div className={style.control}>
                         <label htmlFor="cycleDuration">Cycle Duration</label>
                         <input
                             type="range"
@@ -74,7 +76,7 @@ const Auto = () => {
                         />
                         <p>{data.cycleDuration} sec</p>
                     </div>
-                    <div className={style.randomizationControl}>
+                    <div className={style.control}>
                         <label htmlFor="sessionDuration">Session Duration</label>
                         <input
                             type="range"
@@ -87,7 +89,7 @@ const Auto = () => {
                         />
                         <p>{data.sessionDuration === 0 ? "Infinite" : (data.sessionDuration + " min")}</p>
                     </div>
-                    <div className={style.randomizationControl}>
+                    <div className={style.control}>
                         <label htmlFor="setSpeedInterval">Set Speed Interval</label>
                         <input
                             type="range"
@@ -100,6 +102,7 @@ const Auto = () => {
                         />
                         <p>{data.setSpeedInterval} sec</p>
                     </div>
+                    <button onClick={() => setEnabled(!enabled)}>{enabled ? "Stop Session" : "Start Session"}</button>
                 </div>
             </div>
         </Layout>
