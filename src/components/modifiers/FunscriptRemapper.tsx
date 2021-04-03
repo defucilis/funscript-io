@@ -46,8 +46,7 @@ const FunscriptRemapper = ({
         <div className={style.modifier}>
             <h2>Remapper</h2>
             <p className={style.description}>
-                Halves the speed of a script without sacrificing sync by changing each up+down
-                stroke into a single up or down stroke.
+                Changes the minimum and maximum position values of a script to new values
             </p>
 
             <div className={style.control}>
