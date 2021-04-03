@@ -346,7 +346,7 @@ const Debug = () => {
                         />
                         <p>± {data.randomizeStrokeAmount}%</p>
                     </div>
-                    <p className={style.randomizationSummary}>
+                    <div className={style.randomizationSummary}>
                         {!data.doRandom ? (
                             <p>Your settings will not be randomized</p>
                         ) : (
@@ -401,7 +401,7 @@ const Debug = () => {
                                 </ul>
                             </>
                         )}
-                    </p>
+                    </div>
                 </div>
             </div>
         </Layout>
