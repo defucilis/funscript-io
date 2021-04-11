@@ -90,8 +90,8 @@ const Modify = () => {
     };
 
     useEffect(() => {
-        if (!funscript || !funscript.metadata) return;
-        //setPreviewDuration(funscript.metadata.duration / 50);
+        if (!funscript || !funscript.fuMetadata) return;
+        //setPreviewDuration(funscript.fuMetadata.duration / 50);
         setPreviewDuration(10000);
         setPreviewPosition(0);
     }, [funscript]);
@@ -270,7 +270,7 @@ const Modify = () => {
                                             setPreviewDuration(cur => {
                                                 console.log(e);
                                                 return Math.min(
-                                                    funscript.metadata.duration,
+                                                    funscript.fuMetadata.duration,
                                                     dir < 0 ? cur / 1.5 : cur * 1.5
                                                 );
                                             });
@@ -284,13 +284,13 @@ const Modify = () => {
                                         <p>
                                             Duration:{" "}
                                             {formatDuration(
-                                                Math.round(funscript.metadata.duration / 1000.0)
+                                                Math.round(funscript.fuMetadata.duration / 1000.0)
                                             )}
                                         </p>
                                         <span>|</span>
                                         <p>
                                             Intensity:{" "}
-                                            {Math.round(funscript.metadata.averageIntensity)}
+                                            {Math.round(funscript.fuMetadata.averageIntensity)}
                                         </p>
                                         <span>|</span>
                                         <p>Actions: {funscript.actions.length}</p>
@@ -327,7 +327,7 @@ const Modify = () => {
                                             setPreviewDuration(cur => {
                                                 console.log(e);
                                                 return Math.min(
-                                                    modifiedFunscript.metadata.duration,
+                                                    modifiedFunscript.fuMetadata.duration,
                                                     dir < 0 ? cur / 1.5 : cur * 1.5
                                                 );
                                             });
@@ -342,7 +342,7 @@ const Modify = () => {
                                             Duration:{" "}
                                             {formatDuration(
                                                 Math.round(
-                                                    modifiedFunscript.metadata.duration / 1000.0
+                                                    modifiedFunscript.fuMetadata.duration / 1000.0
                                                 )
                                             )}
                                         </p>
@@ -350,7 +350,7 @@ const Modify = () => {
                                         <p>
                                             Intensity:{" "}
                                             {Math.round(
-                                                modifiedFunscript.metadata.averageIntensity
+                                                modifiedFunscript.fuMetadata.averageIntensity
                                             )}
                                         </p>
                                         <span>|</span>

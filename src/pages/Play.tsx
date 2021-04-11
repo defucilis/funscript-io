@@ -63,8 +63,8 @@ const Play = () => {
     const [lastSyncTime, setLastSyncTime] = useState(-1);
 
     useEffect(() => {
-        if (!funscript || !funscript.metadata) return;
-        //setPreviewDuration(funscript.metadata.duration / 50);
+        if (!funscript || !funscript.fuMetadata) return;
+        //setPreviewDuration(funscript.fuMetadata.duration / 50);
         setPreviewDuration(10000);
         setPreviewPosition(0);
         setLastSyncTime(-1);
@@ -483,7 +483,7 @@ const Play = () => {
                                         <>
                                             <p>
                                                 Duration:{" "}
-                                                {formatDuration(funscript.metadata.duration / 1000)}
+                                                {formatDuration(funscript.fuMetadata.duration / 1000)}
                                             </p>
                                             <p>
                                                 Average Intensity:{" "}
@@ -491,13 +491,13 @@ const Play = () => {
                                                     style={{
                                                         color: formatColor(
                                                             getColor(
-                                                                funscript.metadata.averageIntensity
+                                                                funscript.fuMetadata.averageIntensity
                                                             )
                                                         ),
                                                     }}
                                                 >
                                                     {Math.round(
-                                                        funscript.metadata.averageIntensity
+                                                        funscript.fuMetadata.averageIntensity
                                                     )}
                                                 </span>
                                             </p>
@@ -551,7 +551,7 @@ const Play = () => {
                                         setPreviewDuration(cur => {
                                             console.log(e);
                                             return Math.min(
-                                                funscript.metadata.duration,
+                                                funscript.fuMetadata.duration,
                                                 dir < 0 ? cur / 1.5 : cur * 1.5
                                             );
                                         });
