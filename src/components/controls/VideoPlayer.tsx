@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import ReactPlayer from "react-player";
 
 import { MdPlayArrow, MdPause, MdFullscreen, MdFullscreenExit } from "react-icons/md";
@@ -22,7 +22,13 @@ const formatDuration = (seconds: number) => {
     return output;
 };
 
-const VideoPlayer = ({
+export interface VideoPlayerRef {
+    seek: (seconds: number) => void;
+    seekOffset: (offsetSeconds: number) => void;
+    togglePlay: () => void;
+}
+
+const VideoPlayer = forwardRef(({
     videoUrl,
     videoClassName,
     onPlay,
@@ -36,7 +42,7 @@ const VideoPlayer = ({
     onPause?: () => void;
     onSeek?: (seconds: number) => void;
     onProgress?: (seconds: number) => void;
-}) => {
+}, ref: React.ForwardedRef<VideoPlayerRef>) => {
     const playerParentRef = useRef<HTMLDivElement>();
     const videoRef = useRef<ReactPlayer>();
     const [playing, setPlaying] = useState(false);
@@ -46,6 +52,15 @@ const VideoPlayer = ({
     const [showControls, setShowControls] = useState(true);
     const [mouseInterval, setMouseInterval] = useState<NodeJS.Timeout>();
     const [mouseOnControls, setMouseOnControls] = useState(false);
+
+    useImperativeHandle(ref, () => ({
+        seek: (seconds: number) => seekAbsolute(seconds),
+        seekOffset: (offsetSeconds: number) => seekAbsolute(playbackTime + offsetSeconds),
+        togglePlay: () => {
+            if(playing) pause();
+            else play();
+        },
+    }));
 
     const handleSeek = (seconds: number) => {
         if (onSeek) onSeek(seconds);
@@ -75,11 +90,18 @@ const VideoPlayer = ({
         //if(onProgress) onProgress(newTime);
     };
 
-    const seek = (value: number) => {
-        const duration = (value / 100) * videoDuration;
+    const seekPercent = (durationFraction: number) => {
+        const duration = (durationFraction / 100) * videoDuration;
         videoRef.current.seekTo(duration, "seconds");
         setPlaybackTime(duration);
         handleSeek(duration);
+    };
+
+    const seekAbsolute = (seconds: number) => {
+        const time = Math.max(0, Math.min(videoDuration, seconds));
+        videoRef.current.seekTo(time, "seconds");
+        setPlaybackTime(time);
+        handleSeek(time);
     };
 
     const handleMouseMove = () => {
@@ -148,7 +170,7 @@ const VideoPlayer = ({
                     step={0.01}
                     value={(playbackTime / (videoDuration || 1)) * 100}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        seek(Number(e.target.value));
+                        seekPercent(Number(e.target.value));
                     }}
                 />
                 <div>
@@ -174,6 +196,6 @@ const VideoPlayer = ({
             ></div>
         </div>
     );
-};
+});
 
 export default VideoPlayer;

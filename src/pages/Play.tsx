@@ -12,7 +12,8 @@ import FunscriptHeatmap from "../components/controls/FunscriptHeatmap";
 import SingleScreenPage from "../components/layout/SingleScreenPage";
 import { formatColor, getColor } from "funscript-utils/lib/funMapper";
 import FunscriptPreview from "../components/controls/FunscriptPreview";
-import VideoPlayer from "../components/controls/VideoPlayer";
+import VideoPlayer, { VideoPlayerRef } from "../components/controls/VideoPlayer";
+import useActiveElement from "../lib/useActiveElement";
 
 interface PrepareStatus {
     status: "inactive" | "sync" | "prepare" | "ready";
@@ -39,6 +40,7 @@ const formatDuration = (seconds: number) => {
 
 const Play = () => {
     const { handy } = useHandy();
+    const activeElement = useActiveElement();
 
     const [videoUrl, setVideoUrl] = useState("");
     const [csvUrl, setCsvUrl] = useState("");
@@ -47,6 +49,7 @@ const Play = () => {
     const controlsRef = useRef<HTMLDivElement>();
     const previewRef = useRef<HTMLDivElement>();
     const playerParentRef = useRef<HTMLDivElement>();
+    const videoPlayerRef = useRef<VideoPlayerRef>();
 
     const [waiting, setWaiting] = useState(false);
     const [syncOffset, setSyncOffset] = useState(0);
@@ -315,23 +318,42 @@ const Play = () => {
 
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
-            if (waiting) return;
+            if (activeElement) return;
+            e.preventDefault();
 
-            if (e.key === "ArrowLeft") {
-                e.preventDefault();
-                incrementSyncOffset(50);
-            } else if (e.key === "ArrowRight") {
-                e.preventDefault();
-                incrementSyncOffset(-50);
+            switch(e.key) {
+                case " ":
+                    videoPlayerRef.current.togglePlay();
+                    break;
+                case"ArrowDown":
+                    if (waiting) return;
+                    incrementSyncOffset(-50);
+                    break;
+                case"ArrowUp":
+                    if (waiting) return;
+                    incrementSyncOffset(50);
+                    break;
+                case "ArrowLeft":
+                    videoPlayerRef.current.seekOffset(-10);
+                    break;
+                case "ArrowRight":
+                    videoPlayerRef.current.seekOffset(10);
+                    break;
             }
         };
+        const supressKeyUp = (e: KeyboardEvent) => {
+            if(activeElement) return;
+            e.preventDefault();
+        }
 
         window.addEventListener("keydown", handleKey);
+        window.addEventListener("keyup", supressKeyUp);
 
         return () => {
             window.removeEventListener("keydown", handleKey);
+            window.removeEventListener("keyup", supressKeyUp);
         };
-    }, [waiting, incrementSyncOffset]);
+    }, [waiting, incrementSyncOffset, activeElement]);
 
     const handleVideoProgress = async (seconds: number) => {
         setPlaybackTime(seconds);
@@ -443,6 +465,7 @@ const Play = () => {
                         ) : (
                             <div style={{ height: "100%" }} ref={playerParentRef}>
                                 <VideoPlayer
+                                    ref={videoPlayerRef}
                                     videoClassName={style.player}
                                     videoUrl={videoUrl}
                                     onPlay={handlePlay}
@@ -512,7 +535,7 @@ const Play = () => {
                                         >
                                             Delay Handy
                                         </button>
-                                        <p>(Left Arrow)</p>
+                                        <p>(Down Arrow)</p>
                                     </div>
                                     <div>
                                         <p>
@@ -533,7 +556,7 @@ const Play = () => {
                                         >
                                             Advance Handy
                                         </button>
-                                        <p>(Right Arrow)</p>
+                                        <p>(Up Arrow)</p>
                                     </div>
                                 </div>
                             </div>
