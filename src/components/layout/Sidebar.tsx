@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-import { MdHome, MdOndemandVideo, MdTune, MdLink } from "react-icons/md";
+import { MdHome, MdOndemandVideo, MdTune, MdLink, MdList } from "react-icons/md";
 
 import HandyConnection from "../HandyConnection";
 import style from "./Sidebar.module.scss";
@@ -77,7 +77,19 @@ const Sidebar = () => {
                     </li>
                 </ul>
             </div>
-            <Footer />
+            <div>
+                <ul className={`${style.sidebarNav} ${style.sidebarNavFooter}`}>
+                    <li className={location.pathname === "/changelog" ? style.selected : null}>
+                        <Link to={`/changelog`}>
+                            <span className={style.navIcon}>
+                                <MdList />
+                            </span>
+                            <span className={style.navText}>Changelog</span>
+                        </Link>
+                    </li>
+                </ul>
+                <Footer />
+            </div>
         </div>
     );
 };
