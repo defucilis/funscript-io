@@ -27,6 +27,8 @@ const Debug = () => {
     const [currentStrokeLength, setCurrentStrokeLength] = useState(50);
     const [currentStrokeSpeed, setCurrentStrokeSpeed] = useState(50);
     const [currentMode, setCurrentMode] = useState(0);
+    const [strokeSpeedIncrement, setStrokeSpeedIncrement] = useState(10);
+    const [strokeLengthIncrement, setStrokeLengthIncrement] = useState(10);
 
     const [newStrokeSpeed, setNewStrokeSpeed] = useState(0);
     const [newStrokeLength, setNewStrokeLength] = useState(0);
@@ -85,38 +87,6 @@ const Debug = () => {
         [handy, currentStrokeSpeed]
     );
 
-    const stepSpeed = useCallback(
-        async (up: boolean) => {
-            setWaiting(true);
-            console.log("step speed " + (up ? "up" : "down"));
-            try {
-                const result = await handy.stepSpeed(up);
-                setCurrentStrokeSpeed(result.speedPercent);
-                console.log(result);
-            } catch (error) {
-                console.error(error);
-            }
-            setWaiting(false);
-        },
-        [handy]
-    );
-
-    const stepStroke = useCallback(
-        async (up: boolean) => {
-            setWaiting(true);
-            console.log("step stroke " + (up ? "up" : "down"));
-            try {
-                const result = await handy.stepStroke(up);
-                setCurrentStrokeLength(result.strokePercent);
-                console.log(result);
-            } catch (error) {
-                console.error(error);
-            }
-            setWaiting(false);
-        },
-        [handy]
-    );
-
     const sendSpeed = useCallback(
         async (speed: number) => {
             setWaiting(true);
@@ -147,6 +117,39 @@ const Debug = () => {
             setWaiting(false);
         },
         [handy]
+    );
+
+    const stepSpeed = useCallback(
+        async (up: boolean) => {
+            console.log("step speed " + (up ? "up" : "down"));
+            await sendSpeed(
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        currentStrokeSpeed + (up ? strokeSpeedIncrement : -1 * strokeSpeedIncrement)
+                    )
+                )
+            );
+        },
+        [sendSpeed, currentStrokeSpeed, strokeSpeedIncrement]
+    );
+
+    const stepStroke = useCallback(
+        async (up: boolean) => {
+            console.log("step stroke " + (up ? "up" : "down"));
+            await sendStroke(
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        currentStrokeLength +
+                            (up ? strokeLengthIncrement : -1 * strokeLengthIncrement)
+                    )
+                )
+            );
+        },
+        [sendStroke, currentStrokeLength, strokeLengthIncrement]
     );
 
     useEffect(() => {
@@ -277,6 +280,36 @@ const Debug = () => {
                                 }}
                             />
                             <p>{Math.round(newStrokeLength)}%</p>
+                        </div>
+                        <div style={{ marginTop: "1rem" }}>
+                            <label htmlFor="strokeSpeedIncrement">Speed Increment</label>
+                            <input
+                                type="range"
+                                id="strokeSpeedIncrement"
+                                value={strokeSpeedIncrement}
+                                min={0}
+                                max={100}
+                                step={5}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setStrokeSpeedIncrement(Number(e.target.value))
+                                }
+                            />
+                            <p>{Math.round(strokeSpeedIncrement)}%</p>
+                        </div>
+                        <div>
+                            <label htmlFor="strokeLengthIncrement">Length Increment</label>
+                            <input
+                                type="range"
+                                id="strokeLengthIncrement"
+                                value={strokeLengthIncrement}
+                                min={0}
+                                max={100}
+                                step={5}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setStrokeLengthIncrement(Number(e.target.value))
+                                }
+                            />
+                            <p>{Math.round(strokeLengthIncrement)}%</p>
                         </div>
                     </div>
                 </div>
