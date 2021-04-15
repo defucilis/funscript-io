@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 const useActiveElement = () => {
     const [activeElement, setActiveElement] = useState<Element>(null);
@@ -43,6 +43,6 @@ const useActiveElement = () => {
     }, []);
 
     return activeElement;
-}
+};
 
 export default useActiveElement;

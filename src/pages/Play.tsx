@@ -321,15 +321,15 @@ const Play = () => {
             if (activeElement) return;
             e.preventDefault();
 
-            switch(e.key) {
+            switch (e.key) {
                 case " ":
                     videoPlayerRef.current.togglePlay();
                     break;
-                case"ArrowDown":
+                case "ArrowDown":
                     if (waiting) return;
                     incrementSyncOffset(-50);
                     break;
-                case"ArrowUp":
+                case "ArrowUp":
                     if (waiting) return;
                     incrementSyncOffset(50);
                     break;
@@ -342,9 +342,9 @@ const Play = () => {
             }
         };
         const supressKeyUp = (e: KeyboardEvent) => {
-            if(activeElement) return;
+            if (activeElement) return;
             e.preventDefault();
-        }
+        };
 
         window.addEventListener("keydown", handleKey);
         window.addEventListener("keyup", supressKeyUp);
@@ -506,7 +506,9 @@ const Play = () => {
                                         <>
                                             <p>
                                                 Duration:{" "}
-                                                {formatDuration(funscript.fuMetadata.duration / 1000)}
+                                                {formatDuration(
+                                                    funscript.fuMetadata.duration / 1000
+                                                )}
                                             </p>
                                             <p>
                                                 Average Intensity:{" "}
@@ -514,7 +516,8 @@ const Play = () => {
                                                     style={{
                                                         color: formatColor(
                                                             getColor(
-                                                                funscript.fuMetadata.averageIntensity
+                                                                funscript.fuMetadata
+                                                                    .averageIntensity
                                                             )
                                                         ),
                                                     }}

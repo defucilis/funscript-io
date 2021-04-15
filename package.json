@@ -1,6 +1,6 @@
 {
     "name": "funscript-io",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^4.2.4",
@@ -19,7 +19,6 @@
         "react-dom": "^16.13.1",
         "react-dropzone": "^11.3.1",
         "react-icons": "^4.2.0",
-        "react-markdown": "^5.0.3",
         "react-player": "^2.9.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "^3.4.3",
