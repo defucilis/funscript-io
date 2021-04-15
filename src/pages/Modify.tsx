@@ -142,7 +142,9 @@ const Modify = () => {
                 setPageElement(<FunscriptRandomizer />);
                 break;
             case "limiter":
-                setPageElement(<FusncriptLimiter />);
+                setPageElement(<FusncriptLimiter 
+                    funscript={funscript}
+                    onApply={newScript => setModifiedFunscript(newScript)}/>);
                 break;
         }
     }, [page, funscript]);

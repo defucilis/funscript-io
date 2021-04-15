@@ -34,6 +34,19 @@
         &[type="checkbox"] {
             transform: scale(2);
         }
+
+        &[type="number"], &[type="text"] {
+            width: 200px;
+        }
+    }
+
+    select {
+        font-size: 1.2rem;
+        background-color: var(--color-neutral-300);
+        padding: 0.25rem 0.5rem;
+        color: var(--color-text);
+        border: none;
+        width: 200px;
     }
 
     p {
