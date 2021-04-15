@@ -35,7 +35,8 @@
             transform: scale(2);
         }
 
-        &[type="number"], &[type="text"] {
+        &[type="number"],
+        &[type="text"] {
             width: 200px;
         }
     }

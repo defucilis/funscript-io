@@ -15,12 +15,13 @@ const FusncriptLimiter = ({
     funscript: Funscript;
     onApply?: (funscript: Funscript) => void;
 }): JSX.Element => {
-
     const [deviceMode, setDeviceMode] = useState<DeviceMode>("handy");
     const [manualSpeed, setManualSpeed] = useState(250);
 
     const apply = () => {
-        const newScript = addFunscriptMetadata(getLimitedScript(funscript, deviceMode === "manual" ? manualSpeed : deviceMode));
+        const newScript = addFunscriptMetadata(
+            getLimitedScript(funscript, deviceMode === "manual" ? manualSpeed : deviceMode)
+        );
         if (onApply) onApply(newScript);
     };
 
@@ -52,13 +53,13 @@ const FusncriptLimiter = ({
                     <option value="manual">Manual</option>
                 </select>
             </div>
-            {deviceMode !== "manual" 
-                ? null 
-                : <div className={style.control}>
+            {deviceMode !== "manual" ? null : (
+                <div className={style.control}>
                     <label htmlFor="manualSpeed">
                         <span>Manual Speed</span>
-                        <br/>
-                        <span>(Half-stroke time in ms)</span></label>
+                        <br />
+                        <span>(Half-stroke time in ms)</span>
+                    </label>
                     <input
                         id="manualSpeed"
                         type="number"
@@ -70,7 +71,7 @@ const FusncriptLimiter = ({
                         }
                     />
                 </div>
-            }
+            )}
 
             <button onClick={apply}>Apply Limiter</button>
             <button onClick={clear}>Reset Limiter</button>

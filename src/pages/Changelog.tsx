@@ -16,6 +16,10 @@ const Changelog = (): JSX.Element => {
                         <p className={style.date}>15th April 2021</p>
                         <h3>Added</h3>
                         <ul>
+                            <li>
+                                Added Limiter modifier to ensure a script matches a device&apos;s
+                                capabilities
+                            </li>
                             <li>Space bar now pauses/unpauses the local script player</li>
                             <li>
                                 Left/Right arrow keys now seek 10s back/forward in the local script
@@ -32,6 +36,13 @@ const Changelog = (): JSX.Element => {
                             <li>
                                 Up/Down arrow keys are now used instead of left/right to change sync
                                 offset in the local script player
+                            </li>
+                        </ul>
+                        <h3>Fixed</h3>
+                        <ul>
+                            <li>
+                                Heatmaps now show gaps in the funscript (rather than continuing the
+                                color that was before the gap)
                             </li>
                         </ul>
                     </div>
