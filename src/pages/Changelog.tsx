@@ -12,6 +12,24 @@ const Changelog = (): JSX.Element => {
                 <h1>Changelog</h1>
                 <div className={style.changelog}>
                     <div>
+                        <h2>v0.6.0</h2>
+                        <p className={style.date}>16th April 2021</p>
+                        <h3>Added (suggestions by spuzz1127)</h3>
+                        <ul>
+                            <li>Video playback can now be toggled by clicking the video</li>
+                            <li>
+                                Clicking the heatmap preview in the local player seeks through the
+                                video
+                            </li>
+                            <li>
+                                Funscripts can be previewed during playback by clicking the small
+                                funscript button on the bottom right of the player
+                                <br />
+                                Doesn&apos;t work in fullscreen mode
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
                         <h2>v0.5.0</h2>
                         <p className={style.date}>15th April 2021</p>
                         <h3>Added</h3>
