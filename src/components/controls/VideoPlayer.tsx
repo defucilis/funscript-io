@@ -130,27 +130,29 @@ const VideoPlayer = forwardRef(
 
         return (
             <div className={style.videoPlayer} ref={playerParentRef} onMouseMove={handleMouseMove}>
-                <ReactPlayer
-                    ref={videoRef}
-                    url={videoUrl}
-                    className={videoClassName}
-                    width={"100%"}
-                    height={"100%"}
-                    playing={playing}
-                    progressInterval={250}
-                    onProgress={handleProgress}
-                    onPlay={() => {
-                        if (onPlay) {
-                            onPlay();
-                        }
-                    }}
-                    onPause={() => {
-                        if (onPause) {
-                            onPause();
-                        }
-                    }}
-                    onDuration={(duration: number) => setVideoDuration(duration)}
-                />
+                <div style={{ height: "100%" }} onClick={() => setPlaying(!playing)}>
+                    <ReactPlayer
+                        ref={videoRef}
+                        url={videoUrl}
+                        className={videoClassName}
+                        width={"100%"}
+                        height={"100%"}
+                        playing={playing}
+                        progressInterval={50}
+                        onProgress={handleProgress}
+                        onPlay={() => {
+                            if (onPlay) {
+                                onPlay();
+                            }
+                        }}
+                        onPause={() => {
+                            if (onPause) {
+                                onPause();
+                            }
+                        }}
+                        onDuration={(duration: number) => setVideoDuration(duration)}
+                    />
+                </div>
                 <div
                     className={style.videoOverlay}
                     style={{
