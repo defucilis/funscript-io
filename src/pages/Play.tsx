@@ -62,6 +62,7 @@ const Play = () => {
     const [showingPreview, setShowingPreview] = useState(false);
     const [previewDuration, setPreviewDuration] = useState(1);
     const [previewPosition, setPreviewPosition] = useState(0);
+    const [showPlayingPreview, setShowPlayingPreview] = useState(false);
 
     const [lastSyncTime, setLastSyncTime] = useState(-1);
 
@@ -202,6 +203,14 @@ const Play = () => {
 
     const fullPrepare = useCallback(
         async (url: string) => {
+            //if there's no handy connected, proceed without all the internet stuff and just let the video play
+            try {
+                await handy.getStatus();
+            } catch {
+                setPrepareStatus({ status: "ready" });
+                return;
+            }
+
             setWaiting(true);
             const status: PrepareStatus = {
                 status: "sync",
@@ -472,30 +481,46 @@ const Play = () => {
                                     onPause={handlePause}
                                     onSeek={handleSeek}
                                     onProgress={handleVideoProgress}
+                                    onShowingPreviewChange={setShowPlayingPreview}
                                 />
                             </div>
                         )}
                         <div className={style.preview} ref={previewRef}>
-                            {!funscript || !showingPreview ? null : (
+                            {!funscript || !(showingPreview || showPlayingPreview) ? null : (
                                 <FunscriptPreview
                                     funscripts={[funscript]}
                                     width={!previewRef.current ? 1 : previewRef.current.offsetWidth}
                                     height={
                                         !previewRef.current ? 1 : previewRef.current.offsetHeight
                                     }
-                                    options={[
-                                        {
-                                            clear: true,
-                                            background: "rgba(0,0,0,0.5)",
-                                            startTime: previewPosition,
-                                            duration: previewDuration,
-                                        },
-                                    ]}
+                                    options={
+                                        showPlayingPreview
+                                            ? [
+                                                  {
+                                                      clear: true,
+                                                      background: "rgba(0,0,0,0)",
+                                                      startTime:
+                                                          playbackTime /
+                                                          (funscript.fuMetadata.duration * 0.001),
+                                                      duration: 10000,
+                                                      lineColor: "rgba(255,255,255,0.5)",
+                                                  },
+                                              ]
+                                            : [
+                                                  {
+                                                      clear: true,
+                                                      background: "rgba(0,0,0,0.5)",
+                                                      startTime: previewPosition,
+                                                      duration: previewDuration,
+                                                  },
+                                              ]
+                                    }
+                                    showPlaybackTimeKnob={showPlayingPreview}
                                 />
                             )}
                         </div>
                     </div>
-                    {csvUrl ? (
+                    {funscript ? (
                         <div className={style.controls} ref={controlsRef}>
                             <div className={style.infoControls}>
                                 <div className={style.scriptInfo}>

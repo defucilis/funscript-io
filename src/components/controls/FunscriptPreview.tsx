@@ -3,11 +3,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Funscript } from "funscript-utils/lib/types";
 import { renderActions, ActionsOptions } from "funscript-utils/lib/funMapper";
 
+import style from "./FunscriptPreview.module.scss";
+
 const FunscriptPreview = ({
     funscripts,
     width,
     height,
     options,
+    showPlaybackTimeKnob,
     hoverDisplayDuration,
     onMouseEnter,
     onMouseLeave,
@@ -18,6 +21,7 @@ const FunscriptPreview = ({
     width: number;
     height: number;
     options?: ActionsOptions[];
+    showPlaybackTimeKnob?: boolean;
     hoverDisplayDuration?: number;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
@@ -27,6 +31,7 @@ const FunscriptPreview = ({
     const parentRef = useRef<HTMLDivElement>();
     const canvasRef = useRef<HTMLCanvasElement>();
     const overlayRef = useRef<HTMLDivElement>();
+    const positionDisplayRef = useRef<HTMLDivElement>();
     const [localMousePos, setLocalMousePos] = useState<{ x: number; y: number }>(null);
     const [funscriptDuration, setFunscriptDuration] = useState(1);
 
@@ -34,7 +39,11 @@ const FunscriptPreview = ({
         if (canvasRef.current) {
             if (funscripts.length > 0) {
                 for (let i = 0; i < funscripts.length; i++) {
-                    if (options[i]) renderActions(canvasRef.current, funscripts[i], options[i]);
+                    if (options[i])
+                        renderActions(canvasRef.current, funscripts[i], {
+                            ...options[i],
+                            background: "rgba(0,0,0,0)",
+                        });
                     else renderActions(canvasRef.current, funscripts[i]);
                 }
             } else {
@@ -76,18 +85,47 @@ const FunscriptPreview = ({
         }
     }, [funscriptDuration, localMousePos, hoverDisplayDuration, onMouseMove]);
 
+    const getPositionAtTime = (funscript: Funscript, time: number): number => {
+        const msTime = time * 1000;
+        for (let i = 1; i < funscript.actions.length; i++) {
+            const lastAction = funscript.actions[i - 1];
+            const curAction = funscript.actions[i];
+            if (lastAction.at < msTime && curAction.at > msTime) {
+                const timeLerp = (msTime - lastAction.at) / (curAction.at - lastAction.at);
+                const posLerp = lastAction.pos + timeLerp * (curAction.pos - lastAction.pos);
+                return posLerp;
+            }
+        }
+        return 0;
+    };
+
+    useEffect(() => {
+        if (!positionDisplayRef.current) return;
+        const positionPercentage = getPositionAtTime(
+            funscripts[0],
+            options[0].startTime * funscripts[0].fuMetadata.duration * 0.001 || 0
+        );
+        const positionOffset =
+            Math.round(-4 + 5 * positionPercentage * 0.01) + Math.round(positionPercentage * 0.2); //to turn it into a percentage of the 20px height
+        positionDisplayRef.current.style.setProperty(
+            "bottom",
+            `calc(${positionPercentage}% - ${positionOffset}px)`
+        );
+    }, [positionDisplayRef, funscripts, options]);
+
     return (
         <div
             ref={parentRef}
+            className={style.funscriptPreview}
             style={{
-                position: "relative",
                 width: { width } + "px",
                 height: { height } + "px",
+                backgroundColor: options[0].background || "rgba(0,0,0,0)",
             }}
         >
             <canvas
                 width={width}
-                height={height}
+                height={height - 20}
                 ref={canvasRef}
                 onMouseEnter={() => {
                     if (onMouseEnter) onMouseEnter();
@@ -113,16 +151,10 @@ const FunscriptPreview = ({
                     if (onWheel) onWheel(e);
                 }}
             ></canvas>
-            <div
-                ref={overlayRef}
-                style={{
-                    position: "absolute",
-                    top: "-1px",
-                    height: "100%",
-                    border: "1px solid white",
-                    pointerEvents: "none",
-                }}
-            ></div>
+            <div ref={overlayRef} className={style.overlay}></div>
+            {showPlaybackTimeKnob ? (
+                <div ref={positionDisplayRef} className={style.positionDisplay}></div>
+            ) : null}
         </div>
     );
 };

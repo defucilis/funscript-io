@@ -1,0 +1,25 @@
+.funscriptPreview {
+    position: relative;
+    padding: 10px 0;
+}
+
+.overlay {
+    position: absolute;
+    top: -1px;
+    height: 100%;
+    border: 1px solid white;
+    pointer-events: none;
+}
+
+.positionDisplay {
+    position: absolute;
+    left: calc(50% - 12px);
+    bottom: 0%;
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-theme-500);
+    opacity: 0.5;
+    border: 1px solid black;
+    border-radius: 50%;
+    transition: all 0.05s;
+}

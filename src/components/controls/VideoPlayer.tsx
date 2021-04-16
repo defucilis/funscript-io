@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import ReactPlayer from "react-player";
 
-import { MdPlayArrow, MdPause, MdFullscreen, MdFullscreenExit } from "react-icons/md";
+import { MdPlayArrow, MdPause, MdFullscreen, MdFullscreenExit, MdShowChart } from "react-icons/md";
 
 import style from "./VideoPlayer.module.scss";
 
@@ -37,6 +37,7 @@ const VideoPlayer = forwardRef(
             onPause,
             onSeek,
             onProgress,
+            onShowingPreviewChange,
         }: {
             videoUrl: string;
             videoClassName?: string;
@@ -44,6 +45,7 @@ const VideoPlayer = forwardRef(
             onPause?: () => void;
             onSeek?: (seconds: number) => void;
             onProgress?: (seconds: number) => void;
+            onShowingPreviewChange?: (showingPreview: boolean) => void;
         },
         ref: React.ForwardedRef<VideoPlayerRef>
     ) => {
@@ -56,6 +58,7 @@ const VideoPlayer = forwardRef(
         const [showControls, setShowControls] = useState(true);
         const [mouseInterval, setMouseInterval] = useState<NodeJS.Timeout>();
         const [mouseOnControls, setMouseOnControls] = useState(false);
+        const [showPlayingPreview, setShowPlayingPreview] = useState(false);
 
         useImperativeHandle(ref, () => ({
             seek: (seconds: number) => seekAbsolute(seconds),
@@ -128,6 +131,10 @@ const VideoPlayer = forwardRef(
             };
         }, []);
 
+        useEffect(() => {
+            if (onShowingPreviewChange) onShowingPreviewChange(showPlayingPreview);
+        }, [showPlayingPreview, onShowingPreviewChange]);
+
         return (
             <div className={style.videoPlayer} ref={playerParentRef} onMouseMove={handleMouseMove}>
                 <div style={{ height: "100%" }} onClick={() => setPlaying(!playing)}>
@@ -179,19 +186,27 @@ const VideoPlayer = forwardRef(
                             seekPercent(Number(e.target.value));
                         }}
                     />
-                    <div>
+                    <div className={style.duration}>
                         <p>
                             {formatDuration(playbackTime)} / {formatDuration(videoDuration)}
                         </p>
                     </div>
-                    <button
-                        onClick={() => {
-                            if (fullscreen) document.exitFullscreen();
-                            else playerParentRef.current.requestFullscreen();
-                        }}
-                    >
-                        {fullscreen ? <MdFullscreenExit /> : <MdFullscreen />}
-                    </button>
+                    <div className={style.buttons}>
+                        <button
+                            className={showPlayingPreview ? style.active : null}
+                            onClick={() => setShowPlayingPreview(!showPlayingPreview)}
+                        >
+                            <MdShowChart />
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (fullscreen) document.exitFullscreen();
+                                else playerParentRef.current.requestFullscreen();
+                            }}
+                        >
+                            {fullscreen ? <MdFullscreenExit /> : <MdFullscreen />}
+                        </button>
+                    </div>
                 </div>
                 <div
                     className={style.minimalOverlay}
