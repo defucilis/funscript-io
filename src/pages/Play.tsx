@@ -8,7 +8,7 @@ import Dropzone, { FileRejection } from "react-dropzone";
 import style from "./Play.module.scss";
 import { convertFunscriptToCsv, getFunscriptFromString } from "funscript-utils/lib/funConverter";
 import { Funscript } from "funscript-utils/lib/types";
-import FunscriptHeatmap from "../components/controls/FunscriptHeatmap";
+import FunscriptHeatmap, { Position } from "../components/controls/FunscriptHeatmap";
 import SingleScreenPage from "../components/layout/SingleScreenPage";
 import { formatColor, getColor } from "funscript-utils/lib/funMapper";
 import FunscriptPreview from "../components/controls/FunscriptPreview";
@@ -582,11 +582,17 @@ const Play = () => {
                                             );
                                         });
                                     }}
-                                    onMouseMove={(e: any) => setPreviewPosition(e.localX)}
+                                    onMouseMove={(e: Position) => setPreviewPosition(e.x)}
                                     hoverDisplayDuration={previewDuration}
                                     playbackTime={
                                         !playing && !playbackTime ? undefined : playbackTime
                                     }
+                                    onClick={(e: Position) => {
+                                        if (!videoPlayerRef.current) return;
+                                        videoPlayerRef.current.seek(
+                                            funscript.fuMetadata.duration * e.x * 0.001
+                                        );
+                                    }}
                                 />
                             </div>
                         </div>

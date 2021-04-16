@@ -6,7 +6,7 @@ import Dropzone, { FileRejection } from "react-dropzone";
 import { MdShowChart } from "react-icons/md";
 
 import style from "./Modify.module.scss";
-import FunscriptHeatmap from "../components/controls/FunscriptHeatmap";
+import FunscriptHeatmap, { Position } from "../components/controls/FunscriptHeatmap";
 import FunscriptPreview from "../components/controls/FunscriptPreview";
 import FunscriptOffset from "../components/modifiers/FunscriptOffset";
 import FunscriptFunHalver from "../components/modifiers/FunscriptFunHalver";
@@ -280,7 +280,7 @@ const Modify = () => {
                                                 );
                                             });
                                         }}
-                                        onMouseMove={(e: any) => setPreviewPosition(e.localX)}
+                                        onMouseMove={(e: Position) => setPreviewPosition(e.x)}
                                         hoverDisplayDuration={previewDuration}
                                     />
                                 </div>
@@ -337,7 +337,7 @@ const Modify = () => {
                                                 );
                                             });
                                         }}
-                                        onMouseMove={(e: any) => setPreviewPosition(e.localX)}
+                                        onMouseMove={(e: Position) => setPreviewPosition(e.x)}
                                         hoverDisplayDuration={previewDuration}
                                     />
                                 </div>

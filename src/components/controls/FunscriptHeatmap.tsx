@@ -14,6 +14,11 @@ const getOffset = (el: any) => {
     return { top: _y, left: _x };
 };
 
+export interface Position {
+    x: number;
+    y: number;
+}
+
 const FunscriptHeatmap = ({
     funscript,
     width,
@@ -25,6 +30,7 @@ const FunscriptHeatmap = ({
     onMouseLeave,
     onMouseMove,
     onWheel,
+    onClick,
 }: {
     funscript: Funscript;
     width: number;
@@ -34,14 +40,15 @@ const FunscriptHeatmap = ({
     playbackTime?: number;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
-    onMouseMove?: (pos: { x?: number; y?: number; localX?: number; localY?: number }) => void;
+    onMouseMove?: (pos: Position) => void;
     onWheel?: (e: React.WheelEvent<HTMLCanvasElement>) => void;
+    onClick?: (pos: Position) => void;
 }) => {
     const parentRef = useRef<HTMLDivElement>();
     const canvasRef = useRef<HTMLCanvasElement>();
     const overlayRef = useRef<HTMLDivElement>();
     const playbackRef = useRef<HTMLDivElement>();
-    const [localMousePos, setLocalMousePos] = useState<{ x: number; y: number }>(null);
+    const [localMousePos, setLocalMousePos] = useState<Position>(null);
     const [funscriptDuration, setFunscriptDuration] = useState(1);
 
     useEffect(() => {
@@ -73,12 +80,14 @@ const FunscriptHeatmap = ({
         let localX = localMousePos.x;
         if (localX * funscriptDuration - hoverDisplayDuration * 0.5 < 0) {
             localX = (hoverDisplayDuration * 0.5) / funscriptDuration;
-            setLocalMousePos({ ...localMousePos, x: localX });
-            onMouseMove({ ...localMousePos, localX });
+            const newPos: Position = { x: localX, y: localMousePos.y };
+            setLocalMousePos(newPos);
+            onMouseMove(newPos);
         } else if (localX * funscriptDuration + hoverDisplayDuration * 0.5 > funscriptDuration) {
             localX = (funscriptDuration - hoverDisplayDuration * 0.5) / funscriptDuration;
-            setLocalMousePos({ ...localMousePos, x: localX });
-            onMouseMove({ ...localMousePos, localX });
+            const newPos: Position = { x: localX, y: localMousePos.y };
+            setLocalMousePos(newPos);
+            onMouseMove(newPos);
         }
     }, [funscriptDuration, localMousePos, hoverDisplayDuration, onMouseMove]);
 
@@ -104,13 +113,24 @@ const FunscriptHeatmap = ({
                 }}
                 onMouseMove={e => {
                     const parentOffset = getOffset(parentRef.current);
-                    const localX = (e.pageX - parentOffset.left + 1) / canvasRef.current.width;
-                    const localY = (e.pageY - parentOffset.top + 1) / canvasRef.current.height;
-                    if (onMouseMove) onMouseMove({ localX, localY });
-                    setLocalMousePos({ x: localX, y: localY });
+                    const newPos: Position = {
+                        x: (e.pageX - parentOffset.left + 1) / canvasRef.current.width,
+                        y: (e.pageY - parentOffset.top + 1) / canvasRef.current.height,
+                    };
+                    if (onMouseMove) onMouseMove(newPos);
+                    setLocalMousePos(newPos);
                 }}
                 onWheel={e => {
                     if (onWheel) onWheel(e);
+                }}
+                onClick={e => {
+                    const parentOffset = getOffset(parentRef.current);
+                    const newPos: Position = {
+                        x: (e.pageX - parentOffset.left + 1) / canvasRef.current.width,
+                        y: (e.pageY - parentOffset.top + 1) / canvasRef.current.height,
+                    };
+                    if (onClick) onClick(newPos);
+                    setLocalMousePos(newPos);
                 }}
             ></canvas>
             <div
@@ -133,6 +153,7 @@ const FunscriptHeatmap = ({
                         width: "2px",
                         left: `calc(${(100 * playbackTime * 1000) / funscriptDuration}% - 1px)`,
                         top: "0px",
+                        pointerEvents: "none",
                     }}
                 ></div>
             )}
