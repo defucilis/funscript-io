@@ -12,6 +12,17 @@ const Changelog = (): JSX.Element => {
                 <h1>Changelog</h1>
                 <div className={style.changelog}>
                     <div>
+                        <h2>v0.6.1</h2>
+                        <p className={style.date}>18th April 2021</p>
+                        <h3>Fixed</h3>
+                        <ul>
+                            <li>
+                                Funscript popups now filter for .funscript files (suggestion by
+                                spuzz1127)
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
                         <h2>v0.6.0</h2>
                         <p className={style.date}>16th April 2021</p>
                         <h3>Added (suggestions by spuzz1127)</h3>

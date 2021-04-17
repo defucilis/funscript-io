@@ -415,6 +415,7 @@ const Play = () => {
                             onDropRejected={handleFunscriptRejected}
                             multiple={false}
                             validator={validateFunscript}
+                            accept={".funscript"}
                         >
                             {({ getRootProps, getInputProps, isDragActive }) => (
                                 <div
