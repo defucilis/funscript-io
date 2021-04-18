@@ -14,6 +14,7 @@ import FunscriptFunDoubler from "../components/modifiers/FunscriptFunDoubler";
 import FunscriptRemapper from "../components/modifiers/FunscriptRemapper";
 import FunscriptRandomizer from "../components/modifiers/FunscriptRandomizer";
 import FusncriptLimiter from "../components/modifiers/FunscriptLimiter";
+import FunscriptMetadata from "../components/modifiers/FunscriptMetadata";
 
 const formatDuration = (seconds: number) => {
     seconds = Math.round(seconds);
@@ -144,6 +145,14 @@ const Modify = () => {
             case "limiter":
                 setPageElement(
                     <FusncriptLimiter
+                        funscript={funscript}
+                        onApply={newScript => setModifiedFunscript(newScript)}
+                    />
+                );
+                break;
+            case "metadata":
+                setPageElement(
+                    <FunscriptMetadata
                         funscript={funscript}
                         onApply={newScript => setModifiedFunscript(newScript)}
                     />
@@ -404,6 +413,12 @@ const Modify = () => {
                                 <li
                                     className={page === "limiter" ? style.selected : null}
                                     onClick={() => setPage("limiter")}
+                                >
+                                    Limiter
+                                </li>
+                                <li
+                                    className={page === "metadata" ? style.selected : null}
+                                    onClick={() => setPage("metadata")}
                                 >
                                     Limiter
                                 </li>
