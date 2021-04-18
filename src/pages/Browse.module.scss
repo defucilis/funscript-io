@@ -1,0 +1,79 @@
+.topScriptsGrid {
+    margin-top: 2rem;
+}
+
+svg.indexLoading {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+
+.indexCenter {
+    //this is the height of a two-row script grid...I think
+    //this is also a horrible hack and I am ashamed of it
+    height: calc(2 * (176px + 2rem + 2rem + 2rem + 1.5rem));
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 1.5em;
+
+    span {
+        display: block;
+    }
+
+    svg {
+        font-size: 3em;
+        color: var(--color-theme-500);
+    }
+}
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.topSelectionMethods {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    ul {
+        display: flex;
+        gap: 1rem;
+    }
+
+    li {
+        cursor: pointer;
+        color: var(--color-theme-500);
+        text-decoration: underline;
+    }
+
+    .selected {
+        color: var(--color-text);
+        text-decoration: none;
+    }
+}
+
+.scriptAxisLink {
+    background-color: var(--color-theme-500);
+    display: block;
+    margin: 2rem auto;
+    text-align: center;
+    width: 50%;
+    font-size: 2rem;
+    border-radius: 2px;
+    color: black;
+    padding: 0.5rem 1rem;
+}

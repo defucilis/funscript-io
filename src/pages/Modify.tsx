@@ -17,8 +17,6 @@ import FusncriptLimiter from "../components/modifiers/FunscriptLimiter";
 import FunscriptMetadata from "../components/modifiers/FunscriptMetadata";
 import { formatDuration } from "../lib/utils";
 
-
-
 const Modify = () => {
     const [funscriptError, setFunscriptError] = useState("");
     const [funscriptName, setFunscriptName] = useState("");

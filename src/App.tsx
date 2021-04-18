@@ -8,6 +8,7 @@ import Auto from "./pages/Auto";
 import Manual from "./pages/Manual";
 import Debug from "./pages/Debug";
 import Changelog from "./pages/Changelog";
+import Browse from "./pages/Browse";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route exact path={`/auto`} component={Auto} />
                 <Route exact path={`/debug`} component={Debug} />
                 <Route exact path={`/changelog`} component={Changelog} />
+                <Route exact path={`/browse`} component={Browse} />
             </Switch>
         </div>
     );
