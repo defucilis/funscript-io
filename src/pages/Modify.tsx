@@ -91,8 +91,8 @@ const Modify = () => {
     };
 
     useEffect(() => {
-        if (!funscript || !funscript.fuMetadata) return;
-        //setPreviewDuration(funscript.fuMetadata.duration / 50);
+        if (!funscript || !funscript.metadata) return;
+        //setPreviewDuration(funscript.metadata.duration / 50);
         setPreviewDuration(10000);
         setPreviewPosition(0);
     }, [funscript]);
@@ -285,7 +285,7 @@ const Modify = () => {
                                             setPreviewDuration(cur => {
                                                 console.log(e);
                                                 return Math.min(
-                                                    funscript.fuMetadata.duration,
+                                                    funscript.metadata.duration,
                                                     dir < 0 ? cur / 1.5 : cur * 1.5
                                                 );
                                             });
@@ -299,13 +299,13 @@ const Modify = () => {
                                         <p>
                                             Duration:{" "}
                                             {formatDuration(
-                                                Math.round(funscript.fuMetadata.duration / 1000.0)
+                                                Math.round(funscript.metadata.duration / 1000.0)
                                             )}
                                         </p>
                                         <span>|</span>
                                         <p>
-                                            Intensity:{" "}
-                                            {Math.round(funscript.fuMetadata.averageIntensity)}
+                                            Average Speed:{" "}
+                                            {Math.round(funscript.metadata.average_speed)}
                                         </p>
                                         <span>|</span>
                                         <p>Actions: {funscript.actions.length}</p>
@@ -342,7 +342,7 @@ const Modify = () => {
                                             setPreviewDuration(cur => {
                                                 console.log(e);
                                                 return Math.min(
-                                                    modifiedFunscript.fuMetadata.duration,
+                                                    modifiedFunscript.metadata.duration,
                                                     dir < 0 ? cur / 1.5 : cur * 1.5
                                                 );
                                             });
@@ -357,16 +357,14 @@ const Modify = () => {
                                             Duration:{" "}
                                             {formatDuration(
                                                 Math.round(
-                                                    modifiedFunscript.fuMetadata.duration / 1000.0
+                                                    modifiedFunscript.metadata.duration / 1000.0
                                                 )
                                             )}
                                         </p>
                                         <span>|</span>
                                         <p>
-                                            Intensity:{" "}
-                                            {Math.round(
-                                                modifiedFunscript.fuMetadata.averageIntensity
-                                            )}
+                                            Average Speed:{" "}
+                                            {Math.round(modifiedFunscript.metadata.average_speed)}
                                         </p>
                                         <span>|</span>
                                         <p>Actions: {modifiedFunscript.actions.length}</p>
@@ -420,7 +418,7 @@ const Modify = () => {
                                     className={page === "metadata" ? style.selected : null}
                                     onClick={() => setPage("metadata")}
                                 >
-                                    Limiter
+                                    Metadata
                                 </li>
                             </ul>
                         </div>

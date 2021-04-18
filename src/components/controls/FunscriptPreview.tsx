@@ -103,7 +103,7 @@ const FunscriptPreview = ({
         if (!positionDisplayRef.current) return;
         const positionPercentage = getPositionAtTime(
             funscripts[0],
-            options[0].startTime * funscripts[0].fuMetadata.duration * 0.001 || 0
+            options[0].startTime * funscripts[0].metadata.duration * 0.001 || 0
         );
         const positionOffset =
             Math.round(-4 + 5 * positionPercentage * 0.01) + Math.round(positionPercentage * 0.2); //to turn it into a percentage of the 20px height

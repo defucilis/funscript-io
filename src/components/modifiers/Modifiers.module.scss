@@ -41,6 +41,18 @@
         }
     }
 
+    textarea {
+        font-size: 1.2rem;
+        background-color: var(--color-neutral-300);
+        padding: 0.25rem 0.5rem;
+        resize: none;
+        width: 100% !important;
+    }
+
+    .wideInput {
+        width: 100% !important;
+    }
+
     select {
         font-size: 1.2rem;
         background-color: var(--color-neutral-300);

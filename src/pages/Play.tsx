@@ -67,8 +67,8 @@ const Play = () => {
     const [lastSyncTime, setLastSyncTime] = useState(-1);
 
     useEffect(() => {
-        if (!funscript || !funscript.fuMetadata) return;
-        //setPreviewDuration(funscript.fuMetadata.duration / 50);
+        if (!funscript || !funscript.metadata) return;
+        //setPreviewDuration(funscript.metadata.duration / 50);
         setPreviewDuration(10000);
         setPreviewPosition(0);
         setLastSyncTime(-1);
@@ -502,7 +502,7 @@ const Play = () => {
                                                       background: "rgba(0,0,0,0)",
                                                       startTime:
                                                           playbackTime /
-                                                          (funscript.fuMetadata.duration * 0.001),
+                                                          (funscript.metadata.duration * 0.001),
                                                       duration: 10000,
                                                       lineColor: "rgba(255,255,255,0.5)",
                                                   },
@@ -532,25 +532,20 @@ const Play = () => {
                                         <>
                                             <p>
                                                 Duration:{" "}
-                                                {formatDuration(
-                                                    funscript.fuMetadata.duration / 1000
-                                                )}
+                                                {formatDuration(funscript.metadata.duration / 1000)}
                                             </p>
                                             <p>
-                                                Average Intensity:{" "}
+                                                Average Speed:{" "}
                                                 <span
                                                     style={{
                                                         color: formatColor(
                                                             getColor(
-                                                                funscript.fuMetadata
-                                                                    .averageIntensity
+                                                                funscript.metadata.average_speed
                                                             )
                                                         ),
                                                     }}
                                                 >
-                                                    {Math.round(
-                                                        funscript.fuMetadata.averageIntensity
-                                                    )}
+                                                    {Math.round(funscript.metadata.average_speed)}
                                                 </span>
                                             </p>
                                         </>
@@ -603,7 +598,7 @@ const Play = () => {
                                         setPreviewDuration(cur => {
                                             console.log(e);
                                             return Math.min(
-                                                funscript.fuMetadata.duration,
+                                                funscript.metadata.duration,
                                                 dir < 0 ? cur / 1.5 : cur * 1.5
                                             );
                                         });
@@ -616,7 +611,7 @@ const Play = () => {
                                     onClick={(e: Position) => {
                                         if (!videoPlayerRef.current) return;
                                         videoPlayerRef.current.seek(
-                                            funscript.fuMetadata.duration * e.x * 0.001
+                                            funscript.metadata.duration * e.x * 0.001
                                         );
                                     }}
                                 />
