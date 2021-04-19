@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 
-import useHandy from "../../lib/HandyReact";
+import useHandy from "thehandy-react";
 import useAnim from "../../lib/useAnim";
 
 export interface RandomizeOptions {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, ReactNode } from "react";
 import Layout from "../components/layout/Layout";
 
-import useHandy from "../lib/HandyReact";
+import useHandy from "thehandy-react";
 import { MdShowChart, MdMovie, MdCached } from "react-icons/md";
 import Dropzone, { FileRejection } from "react-dropzone";
 

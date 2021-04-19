@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import Layout from "../components/layout/Layout";
-import useHandy from "../lib/HandyReact";
+import useHandy from "thehandy-react";
 import style from "./Manual.module.scss";
 
 const Debug = () => {

@@ -25,6 +25,7 @@
         "react-spinners": "^0.10.6",
         "sass": "^1.32.1",
         "thehandy": "^0.2.7",
+        "thehandy-react": "^0.2.8",
         "typescript": "^4.1.3"
     },
     "scripts": {

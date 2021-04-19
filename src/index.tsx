@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import "./index.scss";
-import { HandyProvider } from "./lib/HandyReact";
+import { HandyProvider } from "thehandy-react";
 
 ReactDOM.render(
     <React.StrictMode>
