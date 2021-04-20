@@ -24,7 +24,7 @@ const ScriptTile = ({ script }: { script: Script }): JSX.Element => {
                 className={style.thumbnail}
             >
                 <div className={style.imagewrapper}>
-                    <img src={script.thumbnail} />
+                    <img alt={`Preview of script ${script.name}`} src={script.thumbnail} />
                 </div>
                 <div className={style.imageoverlay}></div>
                 <span>{formatDuration(script.duration)}</span>
@@ -49,7 +49,7 @@ const ScriptTile = ({ script }: { script: Script }): JSX.Element => {
             </div>
             <div className={style.bottomrow}>
                 <p className={style.views}>{viewsToString(script.views, true)}</p>
-                {script.likeCount == 0 ? null : (
+                {script.likeCount === 0 ? null : (
                     <div className={style.likes}>
                         <FaHeart />
                         <p>{script.likeCount}</p>
