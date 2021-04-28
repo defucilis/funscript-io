@@ -12,11 +12,23 @@ const Changelog = (): JSX.Element => {
                 <h1>Changelog</h1>
                 <div className={style.changelog}>
                     <div>
+                        <h2>v0.7.1</h2>
+                        <p className={style.date}>28th April 2021</p>
+                        <h3>Fixed</h3>
+                        <ul>
+                            <li>
+                                Solved a crash when attempting to edit the metadata of a script without existing performers or tags keys
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
                         <h2>v0.7.0</h2>
                         <p className={style.date}>18th April 2021</p>
                         <h3>Added</h3>
                         <ul>
-                            <li>Funscripts can now have their metadata edited in the Modify page</li>
+                            <li>
+                                Funscripts can now have their metadata edited in the Modify page
+                            </li>
                             <li>Added ScriptAxis top scripts browser to the Browse page!</li>
                         </ul>
                     </div>

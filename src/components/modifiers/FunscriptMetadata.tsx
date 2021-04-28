@@ -43,10 +43,16 @@ const FunscriptMetadata = ({
         setLicense(funscript.metadata.license || "");
         setNotes(funscript.metadata.notes || "");
         setPerformers(
-            funscript.metadata.performers.length > 0 ? funscript.metadata.performers.join(", ") : ""
+            funscript.metadata.performers && funscript.metadata.performers.length > 0
+                ? funscript.metadata.performers.join(", ")
+                : ""
         );
         setScriptUrl(funscript.metadata.script_url || "");
-        setTags(funscript.metadata.tags.length > 0 ? funscript.metadata.tags.join(", ") : "");
+        setTags(
+            funscript.metadata.tags && funscript.metadata.tags.length > 0
+                ? funscript.metadata.tags.join(", ")
+                : ""
+        );
         setTitle(funscript.metadata.title || "");
         setType(funscript.metadata.type || "");
         setVideoUrl(funscript.metadata.video_url || "");

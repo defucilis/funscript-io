@@ -1,6 +1,6 @@
 {
     "name": "funscript-io",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^4.2.4",
@@ -34,7 +34,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier --write .",
-        "lint": "eslint . --ext ts --ext tsx --ext js"
+        "lint": "eslint --ext ts,tsx,js src"
     },
     "eslintConfig": {
         "extends": "react-app"
