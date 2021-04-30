@@ -12,12 +12,28 @@ const Changelog = (): JSX.Element => {
                 <h1>Changelog</h1>
                 <div className={style.changelog}>
                     <div>
+                        <h2>v0.7.2</h2>
+                        <p className={style.date}>29th April 2021</p>
+                        <h3>Fixed</h3>
+                        <ul>
+                            <li>
+                                Fixed a bug where under certain circumstances, funscripts would
+                                report invalid values for Average Speed
+                            </li>
+                            <li>
+                                Made it possible to refresh the page when in sub-pages (like
+                                /modify) without getting a 404 error
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
                         <h2>v0.7.1</h2>
                         <p className={style.date}>28th April 2021</p>
                         <h3>Fixed</h3>
                         <ul>
                             <li>
-                                Solved a crash when attempting to edit the metadata of a script without existing performers or tags keys
+                                Solved a crash when attempting to edit the metadata of a script
+                                without existing performers or tags keys
                             </li>
                         </ul>
                     </div>

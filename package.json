@@ -1,6 +1,6 @@
 {
     "name": "funscript-io",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "private": true,
     "dependencies": {
         "@testing-library/jest-dom": "^4.2.4",
