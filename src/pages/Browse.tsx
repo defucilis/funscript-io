@@ -76,14 +76,11 @@ const Browse = ({ initialScripts }: { initialScripts?: Script[] }): JSX.Element 
                 }
 
                 setLoading(true);
-                const response = await axios.post(
-                    "https://script-axis-git-develop-defucilis.vercel.app/api/scripts",
-                    {
-                        take: 8,
-                        orderBy: { [orderBy]: "desc" },
-                        minDate: timePeriodToUnixMilliseconds(timePeriod),
-                    }
-                );
+                const response = await axios.post("https://scriptaxis.com/api/scripts", {
+                    take: 8,
+                    orderBy: { [orderBy]: "desc" },
+                    minDate: timePeriodToUnixMilliseconds(timePeriod),
+                });
                 console.log(response.data);
                 if (response.data.error) throw response.data.error;
                 setScripts(response.data);
