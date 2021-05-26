@@ -1,5 +1,15 @@
 //there has to be a better way than this... :I
 const changelog = `
+## v0.8.0
+
+### 26th May 2021
+
+#### Added
+
+  * Custom javascript functions can now be used to mutate a funscripts Actions array in the Modify Script page
+
+---
+
 ## v0.7.3
 
 ### 15th May 2021

@@ -15,6 +15,7 @@ import FunscriptRemapper from "../components/modifiers/FunscriptRemapper";
 import FunscriptRandomizer from "../components/modifiers/FunscriptRandomizer";
 import FusncriptLimiter from "../components/modifiers/FunscriptLimiter";
 import FunscriptMetadata from "../components/modifiers/FunscriptMetadata";
+import FunscriptCustom from "../components/modifiers/FunscriptCustom";
 import { formatDuration } from "../lib/utils";
 
 const Modify = () => {
@@ -137,6 +138,14 @@ const Modify = () => {
             case "metadata":
                 setPageElement(
                     <FunscriptMetadata
+                        funscript={funscript}
+                        onApply={newScript => setModifiedFunscript(newScript)}
+                    />
+                );
+                break;
+            case "custom":
+                setPageElement(
+                    <FunscriptCustom
                         funscript={funscript}
                         onApply={newScript => setModifiedFunscript(newScript)}
                     />
@@ -403,6 +412,12 @@ const Modify = () => {
                                     onClick={() => setPage("metadata")}
                                 >
                                     Metadata
+                                </li>
+                                <li
+                                    className={page === "custom" ? style.selected : null}
+                                    onClick={() => setPage("custom")}
+                                >
+                                    Custom
                                 </li>
                             </ul>
                         </div>
