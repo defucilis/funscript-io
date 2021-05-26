@@ -88,7 +88,7 @@ const Modify = () => {
             return;
         }
 
-        const newFilename = funscriptName.replace(".funscript", "_HALVED.funscript");
+        const newFilename = funscriptName.replace(".funscript", "_MODIFIED.funscript");
         setPreparedFile({
             url: window.URL.createObjectURL(new Blob([JSON.stringify(modifiedFunscript)])),
             filename: newFilename,

@@ -8,6 +8,10 @@ const changelog = `
 
   * Custom javascript functions can now be used to mutate a funscripts Actions array in the Modify Script page
 
+#### Fixed
+
+  * Replaced the "_HALVED" suffix to modified funscripts with "_MODIFIED"
+
 ---
 
 ## v0.7.3
