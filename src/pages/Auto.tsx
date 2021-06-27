@@ -13,6 +13,7 @@ const Auto = () => {
         cycleDuration: 60,
         sessionDuration: 0,
         setSpeedInterval: 0.5,
+        easeInLength: 50,
     });
     const [speed, setSpeed] = useState(0);
 
@@ -101,6 +102,19 @@ const Auto = () => {
                             onChange={handleChange}
                         />
                         <p>{data.setSpeedInterval} sec</p>
+                    </div>
+                    <div className={style.control}>
+                        <label htmlFor="easeInLength">Ease In/Out Balance</label>
+                        <input
+                            type="range"
+                            id="easeInLength"
+                            min="0"
+                            max="100"
+                            step="1"
+                            value={data.easeInLength}
+                            onChange={handleChange}
+                        />
+                        <p>{data.easeInLength}%</p>
                     </div>
                     <button onClick={() => setEnabled(!enabled)}>
                         {enabled ? "Stop Session" : "Start Session"}
