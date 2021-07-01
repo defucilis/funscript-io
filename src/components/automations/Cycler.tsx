@@ -115,25 +115,22 @@ const Cycler = ({
             let cycleValue: number;
             if (longAfterFinish) cycleValue = 1.0;
             else {
-                const trshold = (options.easeInLength/100);
-                let inMul, outMul : number;
+                const threshold = options.easeInLength / 100;
+                let inMul, outMul: number;
                 // Corner cases that would otherwise give us div by zero errors
-                if (trshold === 0)
-                {
-                    inMul = 0; outMul = 1;
-                }
-                else if (trshold === 1)
-                {
-                    inMul = 1; outMul = 0;
-                }
-                else
-                {
-                    inMul = Math.pow(trshold, -1);
-                    outMul = Math.pow(1-trshold, -1);
+                if (threshold === 0) {
+                    inMul = 0;
+                    outMul = 1;
+                } else if (threshold === 1) {
+                    inMul = 1;
+                    outMul = 0;
+                } else {
+                    inMul = Math.pow(threshold, -1);
+                    outMul = Math.pow(1 - threshold, -1);
                 }
 
-                if (cycleX < trshold) cycleValue = easeIn(cycleX * inMul);
-                else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - trshold) * outMul);
+                if (cycleX < threshold) cycleValue = easeIn(cycleX * inMul);
+                else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - threshold) * outMul);
             }
 
             //console.log({options, afterFinish, longAfterFinish, cycleX, cycleValue});
