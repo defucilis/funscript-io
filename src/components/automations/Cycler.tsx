@@ -9,6 +9,7 @@ export interface CyclerOptions {
     cycleDuration: number;
     sessionDuration: number;
     setSpeedInterval: number;
+    easeInLength: number;
 }
 
 const Cycler = ({
@@ -19,6 +20,7 @@ const Cycler = ({
         cycleDuration: 60,
         sessionDuration: 0,
         setSpeedInterval: 0.5,
+        easeInLength: 50,
     },
     onSpeedChanged,
 }: {
@@ -113,8 +115,22 @@ const Cycler = ({
             let cycleValue: number;
             if (longAfterFinish) cycleValue = 1.0;
             else {
-                if (cycleX < 0.5) cycleValue = easeIn(cycleX * 2);
-                else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - 0.5) * 2);
+                const threshold = options.easeInLength / 100;
+                let inMul, outMul: number;
+                // Corner cases that would otherwise give us div by zero errors
+                if (threshold === 0) {
+                    inMul = 0;
+                    outMul = 1;
+                } else if (threshold === 1) {
+                    inMul = 1;
+                    outMul = 0;
+                } else {
+                    inMul = Math.pow(threshold, -1);
+                    outMul = Math.pow(1 - threshold, -1);
+                }
+
+                if (cycleX < threshold) cycleValue = easeIn(cycleX * inMul);
+                else cycleValue = afterFinish ? 1.0 : easeOut((cycleX - threshold) * outMul);
             }
 
             //console.log({options, afterFinish, longAfterFinish, cycleX, cycleValue});
