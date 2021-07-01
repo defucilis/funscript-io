@@ -1,5 +1,15 @@
 //there has to be a better way than this... :I
 const changelog = `
+## v0.9.0
+
+### 30th June 2021
+
+#### Added
+
+  * The Cycler now has an ease in / ease out balance slider to control the length and midpoint of the speed curves
+
+---
+
 ## v0.8.0
 
 ### 26th May 2021
