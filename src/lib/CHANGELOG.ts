@@ -1,5 +1,21 @@
 //there has to be a better way than this... :I
 const changelog = `
+## v0.9.1
+
+### 29th July 2021
+
+#### Added
+
+  * Double-clicking the video player now toggles fullscreen
+
+### Fixed
+
+  * The Limiter modifier no longer outputs broken funscripts (thanks for the bug report Ripovitan_R!)
+  * Pressing space bar before loading a video no longer crashes the app
+  * Space bar no longer opens the file dialog again if it was previously clicked (rather than drag+dropped)
+
+---
+
 ## v0.9.0
 
 ### 30th June 2021
