@@ -316,7 +316,7 @@ const Play = () => {
 
             switch (e.key) {
                 case " ":
-                    videoPlayerRef.current.togglePlay();
+                    if(videoPlayerRef.current) videoPlayerRef.current.togglePlay();
                     break;
                 case "ArrowDown":
                     if (waiting) return;
@@ -327,10 +327,10 @@ const Play = () => {
                     incrementSyncOffset(50);
                     break;
                 case "ArrowLeft":
-                    videoPlayerRef.current.seekOffset(-10);
+                    if(videoPlayerRef.current) videoPlayerRef.current.seekOffset(-10);
                     break;
                 case "ArrowRight":
-                    videoPlayerRef.current.seekOffset(10);
+                    if(videoPlayerRef.current) videoPlayerRef.current.seekOffset(10);
                     break;
             }
         };
