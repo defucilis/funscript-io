@@ -200,6 +200,7 @@ const Modify = () => {
                                 onDropAccepted={handleFunscriptDrop}
                                 onDropRejected={handleFunscriptRejected}
                                 multiple={false}
+                                noKeyboard={true}
                                 validator={validateFunscript}
                                 accept={".funscript"}
                             >

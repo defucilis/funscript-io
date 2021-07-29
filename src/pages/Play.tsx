@@ -370,6 +370,7 @@ const Play = () => {
                             onDropRejected={handleVideoRejected}
                             accept={["video/*"]}
                             multiple={false}
+                            noKeyboard={true}
                             validator={validateVideo}
                         >
                             {({ getRootProps, getInputProps, isDragActive }) => (
@@ -398,6 +399,7 @@ const Play = () => {
                             onDropAccepted={handleFunscriptDrop}
                             onDropRejected={handleFunscriptRejected}
                             multiple={false}
+                            noKeyboard={true}
                             validator={validateFunscript}
                             accept={".funscript"}
                         >
