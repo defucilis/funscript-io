@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import useDoubleClick from "use-double-click";
 import ReactPlayer from "react-player";
 
 import { MdPlayArrow, MdPause, MdFullscreen, MdFullscreenExit, MdShowChart } from "react-icons/md";
@@ -34,6 +35,7 @@ const VideoPlayer = forwardRef(
         ref: React.ForwardedRef<VideoPlayerRef>
     ) => {
         const playerParentRef = useRef<HTMLDivElement>();
+        const videoParentRef = useRef<HTMLDivElement>();
         const videoRef = useRef<ReactPlayer>();
         const [playing, setPlaying] = useState(false);
         const [playbackTime, setPlaybackTime] = useState(0);
@@ -43,6 +45,18 @@ const VideoPlayer = forwardRef(
         const [mouseInterval, setMouseInterval] = useState<NodeJS.Timeout>();
         const [mouseOnControls, setMouseOnControls] = useState(false);
         const [showPlayingPreview, setShowPlayingPreview] = useState(false);
+
+        useDoubleClick({
+            onSingleClick: e => {
+                setPlaying(cur => !cur);
+            },
+            onDoubleClick: e => {
+                if (fullscreen) document.exitFullscreen();
+                else playerParentRef.current.requestFullscreen();
+            },
+            ref: videoParentRef,
+            latency: 200,
+        });
 
         useImperativeHandle(ref, () => ({
             seek: (seconds: number) => seekAbsolute(seconds),
@@ -121,7 +135,7 @@ const VideoPlayer = forwardRef(
 
         return (
             <div className={style.videoPlayer} ref={playerParentRef} onMouseMove={handleMouseMove}>
-                <div style={{ height: "100%" }} onClick={() => setPlaying(!playing)}>
+                <div style={{ height: "100%" }} ref={videoParentRef}>
                     <ReactPlayer
                         ref={videoRef}
                         url={videoUrl}
