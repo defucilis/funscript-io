@@ -1,5 +1,15 @@
 //there has to be a better way than this... :I
 const changelog = `
+## v0.9.2
+
+### 17th October 2021
+
+### Fixed
+
+  * Added URL encoding to SyncPrepare to ensure that scripts sync correctly
+
+---
+
 ## v0.9.1
 
 ### 29th July 2021
