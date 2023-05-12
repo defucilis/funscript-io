@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 
 import style from "./Layout.module.scss";
 import MobileWarning from "./MobileWarning";
+import Analytics from "../Analytics";
 
 const Layout = ({ children }: { children: ReactNode }) => {
     const [wideEnough, setWideEnough] = useState(true);
@@ -25,6 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
                 {wideEnough ? <Sidebar /> : null}
                 {wideEnough ? <div className={style.container}>{children}</div> : <MobileWarning />}
             </div>
+            <Analytics />
         </>
     );
 };

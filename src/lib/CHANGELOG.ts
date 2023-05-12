@@ -1,5 +1,19 @@
 //there has to be a better way than this... :I
 const changelog = `
+## v0.9.3
+
+### 12th May 2023
+
+### Added
+
+  * Added site analytics. Don't freak out, I don't collect or store ANY information about individual users, I only count users (I have no idea how many people actually use this site lol)
+
+### Removed
+
+  * Took out the script browser, since it was broken (RIP ScriptAxis)
+
+---
+
 ## v0.9.2
 
 ### 17th October 2021
