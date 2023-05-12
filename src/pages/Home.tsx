@@ -41,6 +41,7 @@ const Home = () => {
                         <a
                             href={`https://beta.funscript.io`}
                             target="_blank"
+                            rel="noopener noreferrer"
                             style={{
                                 textDecoration: "underline",
                                 color: "#e8739c",

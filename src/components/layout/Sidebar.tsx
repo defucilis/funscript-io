@@ -66,6 +66,7 @@ const Sidebar = () => {
                         <a
                             href={`https://beta.funscript.io`}
                             target="_blank"
+                            rel="noopener noreferrer"
                             style={{
                                 backgroundColor: "#003209",
                             }}
