@@ -30,7 +30,7 @@ const Home = () => {
                     </p>
                     <p>
                         <span style={{ fontStyle: "italic" }}>
-                            With support for Handy Firmwave V3, Handy API V2, mobile screen sizes
+                            With support for Handy Firmware V3, Handy API V2, mobile screen sizes
                             and many,
                             <br />
                             many other new features and improvements, Funscript.io 2 is better in

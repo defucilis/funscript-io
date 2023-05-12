@@ -12,7 +12,6 @@ import Changelog from "./pages/Changelog";
 
 import "./index.scss";
 import { HandyProvider } from "thehandy-react";
-import Analytics from "./components/Analytics";
 
 ReactDOM.render(
     <React.StrictMode>
