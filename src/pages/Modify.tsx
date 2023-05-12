@@ -202,7 +202,7 @@ const Modify = () => {
                                 multiple={false}
                                 noKeyboard={true}
                                 validator={validateFunscript}
-                                accept={".funscript"}
+                                accept={{ "application/json": [".funscript"] }}
                             >
                                 {({ getRootProps, getInputProps, isDragActive }) => (
                                     <div

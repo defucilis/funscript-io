@@ -65,12 +65,10 @@ const FunscriptMetadata = ({
             license,
             notes,
             performers: performers ? performers.split(",").map(performer => performer.trim()) : [],
-            // eslint-disable-next-line @typescript-eslint/camelcase
             script_url: scriptUrl,
             tags: tags ? tags.split(",").map(tag => tag.trim()) : [],
             title,
             type,
-            // eslint-disable-next-line @typescript-eslint/camelcase
             video_url: videoUrl,
         };
         const newScript = addFunscriptMetadata({ ...funscript, metadata });

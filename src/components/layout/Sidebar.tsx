@@ -62,13 +62,23 @@ const Sidebar = () => {
                     </li>
                 </ul>
                 <ul className={style.sidebarNav}>
-                    <li className={location.pathname === "/browse" ? style.selected : null}>
-                        <Link to={`/browse`}>
+                    <li>
+                        <a
+                            href={`https://beta.funscript.io`}
+                            target="_blank"
+                            style={{
+                                backgroundColor: "#003209",
+                            }}
+                        >
                             <span className={style.navIcon}>
                                 <MdLink />
                             </span>
-                            <span className={style.navText}>Browse scripts</span>
-                        </Link>
+                            <span className={style.navText}>
+                                Check out
+                                <br />
+                                Funscript.io V2!
+                            </span>
+                        </a>
                     </li>
                     {/* <li
                         className={location.pathname === "/browse" ? style.selected : null}

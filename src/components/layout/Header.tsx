@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { FaGithub } from "react-icons/fa";
 
-import { version } from "../../../package.json";
+import packageJson from "../../../package.json";
 import style from "./Header.module.scss";
 import EroScripts from "../utility/Eroscripts";
 
@@ -13,7 +13,8 @@ const Header = () => {
             <div className={style.logo}>
                 <div>
                     <Link to={`/`}>
-                        funscript.io<span className={style.versionNumber}>v{version}</span>
+                        funscript.io
+                        <span className={style.versionNumber}>v{packageJson.version}</span>
                     </Link>
                 </div>
             </div>

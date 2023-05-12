@@ -368,7 +368,10 @@ const Play = () => {
                         <Dropzone
                             onDropAccepted={handleVideoDrop}
                             onDropRejected={handleVideoRejected}
-                            accept={["video/*"]}
+                            accept={{
+                                "video/mp4": [".mp4"],
+                                "video/webm": [".webm"],
+                            }}
                             multiple={false}
                             noKeyboard={true}
                             validator={validateVideo}
@@ -401,7 +404,7 @@ const Play = () => {
                             multiple={false}
                             noKeyboard={true}
                             validator={validateFunscript}
-                            accept={".funscript"}
+                            accept={{ "application/json": [".funscript"] }}
                         >
                             {({ getRootProps, getInputProps, isDragActive }) => (
                                 <div
